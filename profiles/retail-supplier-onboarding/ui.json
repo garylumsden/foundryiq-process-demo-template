@@ -26,7 +26,7 @@
   "noAnswer": "No assessment yet. Ask a question to examine the available evidence.",
   "busy": "Retrieving and checking evidence",
   "ready": "Ready",
-  "preview": "Profile review required",
+  "preview": "Workspace setup incomplete",
   "unavailable": "Service unavailable",
   "insufficientEvidence": "Insufficient evidence",
   "clarificationRequired": "Clarification required",
