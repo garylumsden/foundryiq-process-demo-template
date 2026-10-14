@@ -1,7 +1,8 @@
 # Repository guidance
 
-Read `README.md` for setup, including the manual configuration path.
-Use `.github/agents/scenario-setup.agent.md` for guided scenario changes.
+Read `README.md` for the recommended Copilot-guided setup and manual fallback.
+Use `.github/agents/scenario-setup.agent.md` as the primary route for scenario configuration.
+Retain the manual configuration path for users without Copilot.
 
 Validate profiles before changing runtime behavior:
 

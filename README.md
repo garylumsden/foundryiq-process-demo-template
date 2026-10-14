@@ -9,10 +9,70 @@ The application provides:
 - A configurable business process form, register, and saved assessments.
 - Verified source passages, document links, citations, and optional image inputs.
 - A separate evidence-only check for claim support and task scope.
-- Optional Copilot-assisted setup and a complete manual configuration path.
+- Copilot-guided configuration with a complete manual fallback.
 
-**GitHub Copilot is not required.**
-The setup agent uses the same configuration files and commands described below.
+**Use [Copilot-guided configuration](#recommended-copilot-guided-configuration) as the recommended setup experience.**
+The agent turns your scenario into a reviewable profile instead of requiring you to edit each configuration file.
+Use [manual configuration](#manual-configuration-without-github-copilot) when Copilot is unavailable.
+
+## Recommended: Copilot-guided configuration
+
+Create your own repository with **Use this template**.
+Open its root folder in VS Code or GitHub Copilot CLI.
+The repository includes the **scenario-setup** agent and four supporting skills.
+No personal skill installation is required.
+
+### Start the setup agent
+
+**In VS Code:** Open Chat in the repository workspace.
+Select **scenario-setup** from the **Agent** dropdown.
+
+**In GitHub Copilot CLI:** Start Copilot in the repository root.
+Select **scenario-setup** with `/agent`.
+
+Describe the customer, industry, use case, intended users, and available source documents.
+For example:
+
+```text
+Configure this workspace for a retail purchasing team's supplier onboarding process.
+Suggest the process, stages, and fields before writing the final profile.
+Research the topic deeply, then propose policies, sample questions, and a suitable visual style.
+I will supply the logo.
+Keep responses within the approved scope and support factual document claims with verified evidence.
+```
+
+### What the agent configures
+
+The agent proposes a business process and explains which fields the process needs.
+It prepares terminology, prompts, policies, sample questions, form examples, evaluation cases, and presentation settings.
+It can research the topic deeply, use approved supplied documents, or author policies for your review.
+It adapts the visual style and can use a permitted logo that you supply.
+It preserves the shared grounding, citation, task-scope, and verification rules.
+
+| Skill | Purpose |
+|---|---|
+| `scenario-research` | Research sources, status, rights, contradictions, and gaps |
+| `process-profile-authoring` | Create fields, terminology, prompts, content, examples, and evaluation drafts |
+| `scenario-branding` | Configure the visual style and optional logo |
+| `scenario-validation` | Run checks and report approval and readiness |
+
+Deep research is optional and depends on the tools available in your Copilot session.
+The agent must report unavailable tools or evidence gaps rather than invent research.
+It can also update an existing profile while preserving your edits.
+
+### Review, approve, and activate
+
+Review the proposed process, fields, source rights, content, prompts, and [evaluation expectations](#live-evaluations).
+The agent runs preparation and validation, then presents the exact content digest for approval.
+The digest is a SHA-256 fingerprint of the configuration, content, and runtime contracts.
+Approve that digest only after reviewing the content.
+Activation requires a separate decision.
+Relevant changes invalidate earlier approval.
+
+The agent uses the same files and commands as the manual route.
+It does not provision Azure resources or publish customer content implicitly.
+Continue with [Azure configuration](#configure-azure-services) after approving the profile.
+Use [Start locally](#start-locally) for dependencies and a preview without live inference.
 
 ## Architecture
 
@@ -65,6 +125,7 @@ Review the content before activating it or replacing it with your own approved m
 
 ## Manual configuration without GitHub Copilot
 
+Use this fallback when Copilot is unavailable or when you prefer to edit the JSON files directly.
 This procedure does not require Copilot, a Copilot subscription, or the `gh` command.
 Replace values inside angle brackets before running a command.
 
@@ -195,33 +256,6 @@ Reconcile its corpus and deployed prompt versions before enabling inference.
 
 See [Configuration reference](docs/configuration.md) for the full contract.
 
-## Optional Copilot-assisted setup
-
-Select the repository's **scenario-setup** agent in GitHub Copilot CLI.
-For example:
-
-```text
-Configure a supplier onboarding workflow for a retail purchasing team.
-Suggest the process and fields first.
-Research the topic deeply, then propose policies, questions, and a suitable visual style.
-I will supply the logo.
-```
-
-The agent uses four bundled skills:
-
-| Skill | Purpose |
-|---|---|
-| `scenario-research` | Research sources, status, rights, contradictions, and gaps |
-| `process-profile-authoring` | Create fields, terminology, prompts, content, examples, and evaluation drafts |
-| `scenario-branding` | Configure the visual style and optional logo |
-| `scenario-validation` | Run checks and report approval and readiness |
-
-Deep research is optional.
-The agent can instead use approved supplied documents or author policies for review.
-It asks for the process, fields, exact content digest, and activation decisions.
-It can update an existing profile without replacing user edits.
-It does not provision Azure resources or publish customer content implicitly.
-
 ## Configure Azure services
 
 Use a separate environment for this repository.
@@ -263,34 +297,101 @@ No answer appears if required verification fails.
 
 ## Checks
 
+### Local checks
+
+Stop any app instance using the configured port before running the script.
+Run the combined local checks:
+
 ```powershell
-dotnet test Workspace.sln --no-restore
-Push-Location src\Workspace.Web\frontend
-npm test
-npm run test:browser
-Pop-Location
+.\scripts\check.ps1 -Browser
 ```
 
-Start the local app before browser checks.
-They use the configured local address.
-Frontend rendering fixtures do not establish model quality.
+These checks cover profile validation, deterministic evidence rules, typed process fields, local persistence, and browser rendering.
+The script starts and stops its local check server.
+Browser cases use controlled API replies, even when they load assets from the actual app.
+They do not call live models or establish answer quality.
 
-After a successful approved Azure setup:
+### Live evaluations
+
+A live evaluation sends reviewed questions through the same assessment pipeline used by chat and business process forms.
+It calls the configured models and Foundry IQ rather than using browser fixtures.
+It does not replace the HTTP, form, persistence, or browser checks above.
+Live runs consume Azure model and search resources.
+
+Before running it, approve the active profile and complete its Azure setup.
+Its source registry and pinned runtime agents must match the active content digest.
+Select the correct AZD environment and use an existing authenticated Azure CLI session.
 
 ```powershell
+dotnet run --project tools\Workspace.Tools -- validate
 .\scripts\evaluate.ps1
 ```
 
-Live acceptance checks every enabled answer profile.
-Results retain the profile digest, case hash, outcomes, source recall, and verification state.
-Failed results remain under ignored `evals\results`.
-Do not change expected results merely to obtain passing checks.
+The evaluator reads `evals\<active-profile-id>\cases.json`.
+It runs each case once for every enabled answer model in `config\models.json`.
+It evaluates only the active profile, not every profile directory.
+The Copilot setup agent can draft these cases, but you must review their expectations against the admitted sources.
 
-Generate editor schemas with:
+Each case defines:
+
+| Field | Meaning |
+|---|---|
+| `id` | Unique case identifier |
+| `question` | Input sent to the app; keep expected answers and expected source IDs separate |
+| `expectedSources` | Document IDs that retrieval should return |
+| `expectedOutcome` | `answered`, `insufficient_evidence`, `clarification_required`, or `out_of_scope` |
+| `images` | Optional image paths relative to the profile |
+| `minimumRecall` | Required source recall, from `0.9` to `1.0` |
+
+For examples, read the [operational request cases](evals/operational-request-review/cases.json).
+Keep expectations separate from the public prompt library.
+Include supported questions, missing context, evidence gaps, conflicts, instruction-injection attempts, and off-task requests.
+
+### How a live case passes
+
+The assessment pipeline retrieves admitted evidence, validates exact passages and citations, and checks the generated response.
+For an `answered` response, the runtime's evidence-only verifier checks claim support and task scope.
+This is the runtime verification call, not a separate evaluation service.
+A failed or uncertain verification decision blocks factual output.
+
+The evaluator then requires all of these conditions:
+
+1. The actual outcome exactly matches `expectedOutcome`.
+2. Source recall meets the case's `minimumRecall`.
+3. The result contains no response-validation issues.
+4. An `answered` result contains an answer and has verification state `passed`.
+
+Source recall is the number of expected document IDs returned, divided by the number of expected document IDs.
+Multiple passages from one document do not increase that count.
+When `expectedSources` is empty, the evaluator reports recall as `1`; treat that value as not applicable.
+Recall does not measure factual correctness or penalize additional retrieved documents.
+Service failures are not acceptable abstention outcomes.
+
+### Results and reruns
+
+The evaluator prints `PASS` or `FAIL` for each case and model.
+After each completed case, it writes a timestamped JSON report under ignored `evals\results`.
+The report contains the profile digest, case-file hash, failure count, per-case outcome, recall, returned answer, sources, verification state, and token usage.
+Configuration or service errors can stop execution before a case result is recorded.
+Any failed case makes the command exit with a nonzero status.
+
+Inspect the retained sources and result before changing a failed case.
+Correct an expectation only when source review establishes that it was wrong.
+Do not lower thresholds or alter expected outcomes merely to obtain a pass.
+Reports can contain retrieved source content; keep them out of public commits.
+
+Rerun live evaluations after changing sources, scope, prompts, models, or retrieval settings.
+Reconcile approval and cloud artifacts with the updated digest first.
+Repeat a run when you need to examine variation; the evaluator does not repeat cases automatically.
+Model-based verification can make mistakes, so subject-matter review remains necessary.
+
+### Configuration schemas
 
 ```powershell
 dotnet run --project tools\Workspace.Tools -- schemas
 ```
+
+This command exports the configuration and response schemas for editor support.
 
 ## Evidence, data, and deployment limits
 
