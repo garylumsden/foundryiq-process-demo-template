@@ -56,6 +56,8 @@ It checks Foundry prompt-agent support, MCP tools, structured outputs, target av
 It must report unresolved availability rather than guess or silently replace an explicit choice.
 Raw model inference support alone is not enough.
 Native-API fallbacks and hosted model adapters are outside this template's deployment path.
+This is not a Claude provider ban.
+Read the [model compatibility findings](docs/model-compatibility.md) for the historical evidence and the required verification.
 
 The confirmed choice is stored in `config\models.json`.
 `selection.count` must match the enabled answer profiles.

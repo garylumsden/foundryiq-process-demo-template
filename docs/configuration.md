@@ -69,6 +69,8 @@ Declared flags are not proof that a model is deployable.
 An incompatible explicit choice requires an alternative, not silent substitution or a different runtime.
 The template supports managed prompt agents only.
 It does not deploy native-API or hosted model adapters.
+This boundary does not exclude Claude by provider name.
+The [model compatibility findings](model-compatibility.md) distinguish historical workarounds from verified platform restrictions.
 
 `azd up` provisions the enabled model deployments and creates one prompt agent per answer profile.
 Agent names are `<profile-id>-<model-key>`.
