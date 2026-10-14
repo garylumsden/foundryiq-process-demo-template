@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "retail-supplier-onboarding",
+  "version": "1.0.0",
+  "title": "Supplier Workspace",
+  "customer": "Northstar Services",
+  "useCase": "Review supplier identity, product and commercial readiness, trial performance, and activation evidence.",
+  "audience": "Supplier coordinators, category buyers, buying managers, and the head of buying.",
+  "industry": "Retail buying operations",
+  "purpose": "Review supplier applications, product and commercial readiness, trial evidence, and activation decisions for retail buying teams.",
+  "allowedTopics": [
+    "Supplier application intake",
+    "Supplier identity review",
+    "Duplicate supplier checks",
+    "Product readiness",
+    "Commercial readiness",
+    "Supplier trials",
+    "Activation decisions",
+    "Supplier exceptions"
+  ],
+  "excludedTopics": [
+    "Legal advice",
+    "External import obligations",
+    "Product certification requirements",
+    "Contract interpretation",
+    "Payment-account collection",
+    "Unrelated creative or general-knowledge tasks"
+  ]
+}

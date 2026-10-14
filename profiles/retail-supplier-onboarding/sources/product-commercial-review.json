@@ -1,0 +1,17 @@
+{
+  "title": "Product and Commercial Readiness Review",
+  "sections": [
+    {
+      "heading": "Product readiness evidence",
+      "text": "Before a trial order, the category buyer records the product specification, sample-review result, pack dimensions, order unit, delivery lead time, and returns contact. The sample review checks the proposed specification and packaging against the buying brief. Record an unresolved mismatch as an open issue; a sample photograph alone does not establish product quality or suitability."
+    },
+    {
+      "heading": "Commercial terms",
+      "text": "The category buyer records the price list revision, minimum order quantity, delivery charges, agreed payment terms, and process for damaged or incorrect deliveries. The buying manager confirms that these terms match the proposed trial. This internal review does not sign a contract or establish a standard payment period. Resolve missing terms before the first order."
+    },
+    {
+      "heading": "Changed products and terms",
+      "text": "A change to the product specification, pack size, price list, or delivery lead time before the trial requires the category buyer to repeat the affected review. Use the latest recorded revision. Do not reuse a successful sample result for a materially different product. Refer questions about external product certification or contractual interpretation to the responsible specialist."
+    }
+  ]
+}

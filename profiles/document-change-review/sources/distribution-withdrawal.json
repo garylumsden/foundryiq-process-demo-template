@@ -1,0 +1,17 @@
+{
+  "title": "Document Distribution and Withdrawal",
+  "sections": [
+    {
+      "heading": "Publication notice",
+      "text": "The document controller sends the affected audience a notice with the document reference, new revision, effective date, controlled location, and summary of changed instructions. For a process change, the process representative identifies any briefing needed before the effective date. Record the notice and briefing decision with the change reference."
+    },
+    {
+      "heading": "Superseded copies",
+      "text": "On the effective date, remove superseded versions from active shared locations and mark retained reference copies as superseded. The document controller asks local copy owners to replace printed working copies and records their confirmation. A printed copy is uncontrolled unless its copy owner and current revision appear in the distribution record."
+    },
+    {
+      "heading": "Withdrawal",
+      "text": "A withdrawal requires the document owner's reason, affected audience, effective date, and replacement document or an explicit statement that no replacement exists. The document controller sends a withdrawal notice and removes the document from active locations on the effective date. Retain the withdrawal decision and distribution record. This policy does not set an archive-retention period."
+    }
+  ]
+}

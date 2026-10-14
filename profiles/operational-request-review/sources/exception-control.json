@@ -1,0 +1,17 @@
+{
+  "title": "Operational Request Exceptions and Records",
+  "sections": [
+    {
+      "heading": "Exception record",
+      "text": "An exception record must name the unmet internal rule, the business reason, the affected request, the proposed control, the owner, and an expiry date. The operations manager may authorize a scheduling or partial-completion exception for no more than 30 calendar days. The manager must not authorize their own request. Record the decision before using the exception."
+    },
+    {
+      "heading": "Non-waivable controls",
+      "text": "An exception cannot waive access authorization, the recovery action, or truthful recording of test results. Do not treat silence, a requested target date, or a chat response as approval. If a proposed exception requires waiving a non-waivable control, decline the exception and refer the request to the service owner for a different plan."
+    },
+    {
+      "heading": "Record handling",
+      "text": "Keep the request reference, owner decision, execution evidence, notifications, closure evidence, and any exception together. Describe sensitive information by its type and approved record location; do not copy passwords, access tokens, or personal case details into the request. This policy does not set a record-retention period or a monetary approval threshold."
+    }
+  ]
+}

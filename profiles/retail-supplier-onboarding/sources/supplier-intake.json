@@ -1,0 +1,17 @@
+{
+  "title": "Supplier Intake and Identity Review",
+  "sections": [
+    {
+      "heading": "Supplier application",
+      "text": "A supplier application must include a unique reference, supplier name, product category, buying team, trading region, expected annual order value, proposed start date, and onboarding summary. The summary must identify the products, the business contact role, and the proposed fulfilment arrangement. Use the buying team's recorded forecast for the annual order value; do not treat the estimate as a purchase commitment."
+    },
+    {
+      "heading": "Identity and record checks",
+      "text": "The supplier coordinator checks that the trading name, contact route, and payment-account holder are consistent across the application and supplied records. Record the evidence location and review date. Check the supplier register for duplicate names and matching contact details before creating a supplier record. Keep payment-account details outside this workspace."
+    },
+    {
+      "heading": "Unresolved identity",
+      "text": "If the account holder differs from the trading name, request an explanation and supporting records through the established supplier contact. The supplier coordinator must resolve the difference before payment setup. A buying manager may continue product review while the difference remains open, but cannot authorize orders or payment setup. This review does not determine compliance with external registration or licensing requirements."
+    }
+  ]
+}

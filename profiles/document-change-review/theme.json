@@ -1,0 +1,19 @@
+{
+  "layout": "comfortable",
+  "font": "serif",
+  "textSize": 16,
+  "tokens": {
+    "ink": "#2D2940",
+    "muted": "#5B546C",
+    "primary": "#63418E",
+    "onPrimary": "#FFFFFF",
+    "canvas": "#F7F5FA",
+    "surface": "#FFFFFF",
+    "border": "#C9BFD8",
+    "focus": "#65418C",
+    "danger": "#A12438",
+    "banner": "#413058"
+  },
+  "logo": null,
+  "logoAlt": ""
+}

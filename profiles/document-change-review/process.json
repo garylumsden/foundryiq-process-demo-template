@@ -1,0 +1,185 @@
+{
+  "id": "document-change-review",
+  "version": "1.0.0",
+  "name": "Controlled Document Change Review",
+  "stages": [
+    {
+      "id": "identify",
+      "label": "Controlled document"
+    },
+    {
+      "id": "change",
+      "label": "Proposed change"
+    },
+    {
+      "id": "publication",
+      "label": "Publication request"
+    }
+  ],
+  "fields": [
+    {
+      "id": "reference",
+      "label": "Change reference",
+      "type": "text",
+      "required": true,
+      "stage": "identify",
+      "help": "Use a unique reference for the change request.",
+      "placeholder": "NS-CHG-0096",
+      "options": [],
+      "maxLength": 50,
+      "min": null,
+      "max": null
+    },
+    {
+      "id": "document-reference",
+      "label": "Document reference",
+      "type": "text",
+      "required": true,
+      "stage": "identify",
+      "help": "Identify the internal controlled document.",
+      "placeholder": "NS-WI-028",
+      "options": [],
+      "maxLength": 60,
+      "min": null,
+      "max": null
+    },
+    {
+      "id": "current-revision",
+      "label": "Current revision",
+      "type": "text",
+      "required": true,
+      "stage": "identify",
+      "help": "Enter the revision shown at the controlled location.",
+      "placeholder": "3.2",
+      "options": [],
+      "maxLength": 30,
+      "min": null,
+      "max": null
+    },
+    {
+      "id": "document-owner",
+      "label": "Document owner role",
+      "type": "text",
+      "required": true,
+      "stage": "identify",
+      "help": "State the role responsible for the document.",
+      "placeholder": "Customer Support Operations Lead",
+      "options": [],
+      "maxLength": 120,
+      "min": null,
+      "max": null
+    },
+    {
+      "id": "change-category",
+      "label": "Change category",
+      "type": "select",
+      "required": true,
+      "stage": "change",
+      "help": "Select the category supported by the proposed content change.",
+      "placeholder": "",
+      "options": [
+        "Editorial correction",
+        "Process change",
+        "Withdrawal"
+      ],
+      "maxLength": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "id": "change-reason",
+      "label": "Reason for change",
+      "type": "multiline",
+      "required": true,
+      "stage": "change",
+      "help": "Describe why the current content needs to change.",
+      "placeholder": "Identify the current problem and its effect.",
+      "options": [],
+      "maxLength": 600,
+      "min": null,
+      "max": null
+    },
+    {
+      "id": "affected-audience",
+      "label": "Affected audience",
+      "type": "multiselect",
+      "required": true,
+      "stage": "change",
+      "help": "Select all groups that use the affected instructions.",
+      "placeholder": "",
+      "options": [
+        "Customer Support",
+        "Workplace Services",
+        "Finance Operations",
+        "Digital Operations",
+        "Document Controllers"
+      ],
+      "maxLength": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "id": "proposed-changes",
+      "label": "Affected sections and proposed changes",
+      "type": "multiline",
+      "required": true,
+      "stage": "change",
+      "help": "Identify affected sections, the proposed wording change, and the controlled source location.",
+      "placeholder": "Describe what will change without claiming that it has been reviewed.",
+      "options": [],
+      "maxLength": 1000,
+      "min": null,
+      "max": null
+    },
+    {
+      "id": "urgent-correction",
+      "label": "Urgent correction requested",
+      "type": "boolean",
+      "required": true,
+      "stage": "publication",
+      "help": "Select only when the current instruction can interrupt a service or directs a known incorrect action.",
+      "placeholder": "",
+      "options": [],
+      "maxLength": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "id": "publication-date",
+      "label": "Requested publication date",
+      "type": "date",
+      "required": true,
+      "stage": "publication",
+      "help": "Enter the requested publication date. This date does not authorize publication.",
+      "placeholder": "",
+      "options": [],
+      "maxLength": null,
+      "min": null,
+      "max": null
+    }
+  ],
+  "referenceField": "reference",
+  "registerColumns": [
+    "reference",
+    "document-reference",
+    "change-category",
+    "publication-date"
+  ],
+  "summaryFields": [
+    "reference",
+    "document-reference",
+    "current-revision",
+    "change-category"
+  ],
+  "assessmentFields": [
+    "document-reference",
+    "current-revision",
+    "document-owner",
+    "change-category",
+    "change-reason",
+    "affected-audience",
+    "proposed-changes",
+    "urgent-correction",
+    "publication-date"
+  ]
+}

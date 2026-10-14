@@ -1,0 +1,17 @@
+{
+  "title": "Supplier Trial and Activation",
+  "sections": [
+    {
+      "heading": "Trial entry and limits",
+      "text": "Start a trial only after identity checks and product and commercial reviews are complete. The buying manager records the trial plan, receiving location, order limit, and supplier contact. A trial covers at most three purchase orders over 30 calendar days. The category buyer sets a monetary order limit within the buying team's separate authority; this policy does not define that authority."
+    },
+    {
+      "heading": "Trial performance",
+      "text": "Record the promised and actual delivery date, ordered and received quantity, damage count, and resolution of any issue for every trial order. A successful trial requires at least two completed deliveries, every delivery within the agreed delivery window, at least 98 percent of ordered units received in usable condition across the trial, and no unresolved delivery issue. Calculate the usable-unit rate from recorded counts, not photographs."
+    },
+    {
+      "heading": "Activation decision",
+      "text": "The buying manager reviews the trial evidence and records activate, extend trial, or decline with reasons. Activation requires a successful trial and a named category buyer. One extension of up to 15 calendar days is allowed when the only missing evidence is the second completed delivery. An extension does not permit a fourth trial purchase order. Failed performance requires a corrective plan and a new trial decision."
+    }
+  ]
+}

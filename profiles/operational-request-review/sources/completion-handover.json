@@ -1,0 +1,17 @@
+{
+  "title": "Request Completion and Service Handover",
+  "sections": [
+    {
+      "heading": "Completion evidence",
+      "text": "Before closure, the implementation owner records the action completed, completion date, test result, and any remaining issue. The test must check the measurable objective in the accepted request. A failed test keeps the request open unless the service owner accepts a documented partial result under the exception process."
+    },
+    {
+      "heading": "Handover and confirmation",
+      "text": "Give the receiving team the operating notes, support contact, and known limitations. The service owner confirms that the receiving team has the information needed to operate the changed service. Record requester confirmation or two unanswered confirmation attempts separated by at least two working days. The service owner may close after the second attempt when the completion test passed and no unresolved issue prevents service use."
+    },
+    {
+      "heading": "Reopening a request",
+      "text": "Reopen a request when the accepted objective fails within ten working days after closure. Link the new evidence to the original reference and assign the service owner to review it. Changes to the agreed objective require a new request rather than reopening the completed request."
+    }
+  ]
+}

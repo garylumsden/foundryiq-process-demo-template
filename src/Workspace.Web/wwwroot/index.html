@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f6f8">
+  <title>Workspace</title>
+  <link rel="stylesheet" href="/workspace.css">
+  <link rel="stylesheet" href="/theme.css">
+  <script defer src="/vendor/marked.umd.js"></script>
+  <script defer src="/vendor/purify.min.js"></script>
+  <script defer src="/mermaid-passage.js"></script>
+  <script defer src="/source-passage.js"></script>
+  <script defer src="/workspace.js"></script>
+  <script defer src="/chat.js"></script>
+</head>
+<body>
+  <div class="top-banner">DEMO</div>
+  <p id="startup" class="startup" role="status">Loading…</p>
+  <div id="application" hidden>
+    <a class="skip-link" href="#main" data-ui="skipLink"></a>
+    <header class="app-header">
+      <a class="brand" href="/" aria-label="Workspace">
+        <img id="brand-logo" width="40" height="40" hidden alt="">
+        <span><strong data-ui="title"></strong><small id="profile-version"></small></span>
+      </a>
+      <nav aria-label="Main navigation">
+        <a href="/" data-ui="chatNav" aria-current="page"></a>
+        <a href="/business-process.html" data-ui="processNav"></a>
+      </nav>
+    </header>
+    <div class="service-strip">
+      <span id="readiness" role="status"></span>
+      <span id="usage" class="usage" aria-live="polite"></span>
+    </div>
+    <div id="service-error" class="error service-error" role="alert" hidden></div>
+    <main id="main" tabindex="-1">
+      <div class="page-heading"><div><h1 data-ui="chatHeading"></h1><p data-ui="chatHelp"></p></div></div>
+      <div class="workspace-grid">
+        <section class="panel question-panel" aria-labelledby="question-label">
+          <form id="ask-form">
+            <div class="field">
+              <label id="question-label" for="question" data-ui="questionLabel"></label>
+              <textarea id="question" name="question" rows="5" required autocomplete="off" data-placeholder="questionPlaceholder"></textarea>
+              <span id="question-length" class="field-help"></span>
+            </div>
+            <div class="field model-field">
+              <label for="chat-model" data-ui="modelLabel"></label>
+              <select id="chat-model" name="model"></select>
+            </div>
+            <div id="chat-images"></div>
+            <div id="ask-error" class="error" role="alert" hidden></div>
+            <div class="actions">
+              <button id="ask-button" class="primary" type="submit" data-ui="ask" data-inference></button>
+              <button id="new-conversation" type="button" data-ui="newConversation"></button>
+            </div>
+          </form>
+        </section>
+        <aside class="panel example-panel" aria-labelledby="prompt-heading">
+          <h2 id="prompt-heading" data-ui="promptHeading"></h2>
+          <p class="section-help" data-ui="promptHelp"></p>
+          <div id="prompt-examples"></div>
+        </aside>
+      </div>
+      <section id="conversation" class="conversation" aria-label="Conversation" aria-live="polite" aria-relevant="additions"></section>
+      <section class="panel search-panel" aria-labelledby="search-label">
+        <form id="search-form" class="search-form">
+          <div class="field">
+            <label id="search-label" for="search-question" data-ui="searchLabel"></label>
+            <input id="search-question" name="question" type="search" required autocomplete="off" data-placeholder="searchPlaceholder">
+          </div>
+          <button id="search-button" type="submit" data-ui="search" data-inference></button>
+        </form>
+        <div id="search-error" class="error" role="alert" hidden></div>
+        <div id="search-results" aria-live="polite"></div>
+        <div id="search-pages" class="pagination" hidden>
+          <button id="previous-page" type="button" data-ui="previousPage"></button>
+          <span id="page-number"></span>
+          <button id="next-page" type="button" data-ui="nextPage"></button>
+        </div>
+      </section>
+    </main>
+    <footer><span data-ui="footer"></span><span id="profile-purpose"></span></footer>
+  </div>
+</body>
+</html>

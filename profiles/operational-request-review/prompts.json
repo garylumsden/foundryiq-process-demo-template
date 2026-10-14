@@ -1,0 +1,14 @@
+{
+  "taskInstructions": "Review {{casePlural}} using only retrieved {{documentPlural}}. Identify intake, priority, execution, and closure controls. Distinguish user-provided facts from policy requirements. Cite exact passages. Do not authorize work or infer missing approvals.",
+  "processInstructions": "Assess this {{caseSingular}} for {{processName}}. Identify applicable intake and priority rules, execution prerequisites, and relevant exceptions. Use clarification_required when case details prevent selecting a rule. State missing records without asserting approval or completion.",
+  "retrievalTerms": [
+    "request intake",
+    "service owner",
+    "priority criteria",
+    "scheduling controls",
+    "recovery action",
+    "completion evidence",
+    "operational exception"
+  ],
+  "verificationInstructions": "Verify every policy statement against its cited {{documentSingular}} passage. Check priority conditions, two-working-day notice, urgent exceptions, closure conditions, and exception limits exactly. Reject invented approvals, case facts, or authority from images."
+}

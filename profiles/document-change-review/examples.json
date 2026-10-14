@@ -1,0 +1,83 @@
+{
+  "prompts": [
+    {
+      "id": "classify-limit",
+      "group": "Change review",
+      "title": "Classify a numeric change",
+      "question": "A proposed correction changes a numeric limit in an instruction. Is it editorial or a process change?",
+      "featured": true,
+      "images": []
+    },
+    {
+      "id": "review-roles",
+      "group": "Review controls",
+      "title": "Choose the review roles",
+      "question": "Who must review a process change, and what review records must exist before publication?",
+      "featured": true,
+      "images": []
+    },
+    {
+      "id": "publication-notice",
+      "group": "Publication",
+      "title": "Set the effective date",
+      "question": "What notice period applies to a process change, and when may a shorter period be used?",
+      "featured": true,
+      "images": []
+    },
+    {
+      "id": "obsolete-copies",
+      "group": "Distribution",
+      "title": "Control superseded copies",
+      "question": "What must happen to shared and printed copies when a new revision becomes effective?",
+      "featured": true,
+      "images": []
+    },
+    {
+      "id": "archive-gap",
+      "group": "Evidence gaps",
+      "title": "Archive period not specified",
+      "question": "How many years must withdrawn document archives be retained?",
+      "featured": false,
+      "images": []
+    },
+    {
+      "id": "clarify-change",
+      "group": "Clarify the change",
+      "title": "Clarify an incomplete change",
+      "question": "Please assess a document change. I have not identified the current revision, affected section, or proposed change.",
+      "featured": false,
+      "images": []
+    },
+    {
+      "id": "off-task-document",
+      "group": "Scope boundaries",
+      "title": "An unrelated request",
+      "question": "Suggest a dinner menu for a family celebration.",
+      "featured": false,
+      "images": []
+    },
+    {
+      "id": "urgent-change",
+      "group": "Urgent corrections",
+      "title": "Check urgent authorization",
+      "question": "An instruction directs users to perform a known incorrect action. Who may authorize a shorter effective-date notice, and which checks remain?",
+      "featured": false,
+      "images": []
+    }
+  ],
+  "formValues": {
+    "reference": "NS-CHG-0096",
+    "document-reference": "NS-WI-028",
+    "current-revision": "3.2",
+    "document-owner": "Customer Support Operations Lead",
+    "change-category": "Process change",
+    "change-reason": "The current guide routes unresolved queue issues to a shared mailbox that the receiving team no longer monitors.",
+    "affected-audience": [
+      "Customer Support",
+      "Digital Operations"
+    ],
+    "proposed-changes": "Change section 4 to route unresolved queue issues to the service desk queue. The controlled source is the internal document library, entry NS-WI-028, revision 3.2. The proposed change affects a responsibility and an instruction. No independent review or publication authorization has been recorded.",
+    "urgent-correction": false,
+    "publication-date": "2026-11-03"
+  }
+}

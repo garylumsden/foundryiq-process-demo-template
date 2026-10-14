@@ -1,0 +1,17 @@
+{
+  "title": "Operational Request Intake and Review",
+  "sections": [
+    {
+      "heading": "Required request information",
+      "text": "A request must include a unique reference, business area, category, objective, description, impact, priority, and target date. The description must identify the current condition, the proposed action, and the responsible service owner. The objective must state a measurable result. Return an incomplete request for clarification before scheduling work."
+    },
+    {
+      "heading": "Review ownership and decision",
+      "text": "The service owner reviews the request within two working days after intake. The review records the scope, dependencies, available capacity, affected teams, and evidence supporting the stated impact. The service owner records one decision: accept for planning, request clarification, or decline with a reason. Acceptance for planning does not authorize execution."
+    },
+    {
+      "heading": "Scope and classification",
+      "text": "Use access administration for changes to existing permissions, service change for changes to an established service, and facilities support for workplace service requests. A request that changes two services must identify a coordinating owner and both service owners. This process does not approve employment decisions, legal advice, purchases, or emergency response. Refer those requests to the responsible function."
+    }
+  ]
+}

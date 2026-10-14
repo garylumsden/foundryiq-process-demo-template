@@ -1,0 +1,127 @@
+{
+  "type": "object",
+  "properties": {
+    "collection": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "searchApiVersion": {
+      "type": "string"
+    },
+    "container": {
+      "type": "string"
+    },
+    "assetContainer": {
+      "type": "string"
+    },
+    "knowledgeSource": {
+      "type": "string"
+    },
+    "knowledgeBase": {
+      "type": "string"
+    },
+    "index": {
+      "type": "string"
+    },
+    "connection": {
+      "type": "string"
+    },
+    "maxPassages": {
+      "type": "integer"
+    },
+    "documents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "statusEvidence": {
+            "type": "string"
+          },
+          "effectiveFrom": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date"
+          },
+          "withdrawnAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date"
+          },
+          "file": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          },
+          "publisher": {
+            "type": "string"
+          },
+          "origin": {
+            "type": "string"
+          },
+          "rights": {
+            "type": "string"
+          },
+          "published": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "revision",
+          "kind",
+          "status",
+          "statusEvidence",
+          "effectiveFrom",
+          "withdrawnAt",
+          "file",
+          "sha256",
+          "publisher",
+          "origin",
+          "rights"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "collection",
+    "version",
+    "searchApiVersion",
+    "container",
+    "assetContainer",
+    "knowledgeSource",
+    "knowledgeBase",
+    "index",
+    "connection",
+    "maxPassages",
+    "documents"
+  ],
+  "additionalProperties": false
+}

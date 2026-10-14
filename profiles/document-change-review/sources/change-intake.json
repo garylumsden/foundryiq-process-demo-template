@@ -1,0 +1,17 @@
+{
+  "title": "Controlled Document Change Intake",
+  "sections": [
+    {
+      "heading": "Required change information",
+      "text": "A change request must include a unique change reference, document reference, current revision, document owner, change category, reason for change, affected audience, proposed changes, and requested publication date. Identify the sections that will change and the source of the current document. The document owner checks that the request refers to the current controlled revision before assigning review."
+    },
+    {
+      "heading": "Change categories",
+      "text": "Use editorial correction only for spelling, formatting, or a contact update that does not change an instruction, responsibility, acceptance criterion, or reference. Use process change when any of those items changes. Use withdrawal when a document will no longer be available for use. A changed numeric limit is a process change even when it appears to correct a typing error."
+    },
+    {
+      "heading": "Intake decision",
+      "text": "The document owner records accept for review, request clarification, or decline with reasons within three working days. Return a request when the affected section or proposed change is unclear. Acceptance for review does not authorize publication. This process controls internal documents; it does not amend an external publication or interpret contractual requirements."
+    }
+  ]
+}

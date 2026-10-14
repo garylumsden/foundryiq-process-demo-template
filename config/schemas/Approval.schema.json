@@ -1,0 +1,16 @@
+{
+  "type": "object",
+  "properties": {
+    "digest": {
+      "type": "string"
+    },
+    "decision": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "digest",
+    "decision"
+  ],
+  "additionalProperties": false
+}

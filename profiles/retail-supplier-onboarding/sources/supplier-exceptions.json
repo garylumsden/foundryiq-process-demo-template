@@ -1,0 +1,17 @@
+{
+  "title": "Supplier Exceptions and Review Records",
+  "sections": [
+    {
+      "heading": "Permitted exception",
+      "text": "The head of buying may permit product review to continue without final pack dimensions when the supplier provides them before the trial order. Record the affected application, reason, owner, due date, and authorizing role. The due date must be no later than 14 calendar days after the decision. This exception does not authorize a trial order."
+    },
+    {
+      "heading": "Controls that remain mandatory",
+      "text": "Do not waive resolved supplier identity, agreed commercial terms, sample-review evidence, or the trial-entry checks. A supplier's requested launch date is not an approval. A requester cannot authorize their own exception. Do not activate a supplier on the basis of a sales email, a sample image, or an unverified claim of approval."
+    },
+    {
+      "heading": "Review record and scope",
+      "text": "Keep the identity review, product review, commercial review, trial plan, trial performance, and activation decision linked to the supplier reference. Record evidence locations rather than payment-account details or personal identification documents. These internal policies do not set legal import obligations, certification requirements, contract clauses, or an approved-supplier retention period."
+    }
+  ]
+}

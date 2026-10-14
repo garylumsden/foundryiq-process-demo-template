@@ -1,0 +1,157 @@
+{
+  "id": "operational-request-review",
+  "version": "1.0.0",
+  "name": "Operational Request Review",
+  "stages": [
+    {
+      "id": "request",
+      "label": "Request details"
+    },
+    {
+      "id": "impact",
+      "label": "Impact and scheduling"
+    }
+  ],
+  "fields": [
+    {
+      "id": "reference",
+      "label": "Request reference",
+      "type": "text",
+      "required": true,
+      "stage": "request",
+      "help": "Use a unique reference for this request.",
+      "placeholder": "NS-REQ-0264",
+      "options": [],
+      "maxLength": 50,
+      "min": null,
+      "max": null
+    },
+    {
+      "id": "business-area",
+      "label": "Business area",
+      "type": "select",
+      "required": true,
+      "stage": "request",
+      "help": "Select the team that needs the service.",
+      "placeholder": "",
+      "options": [
+        "Customer Support",
+        "Workplace Services",
+        "Finance Operations",
+        "Digital Operations"
+      ],
+      "maxLength": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "id": "category",
+      "label": "Request category",
+      "type": "select",
+      "required": true,
+      "stage": "request",
+      "help": "Select the type of operational work.",
+      "placeholder": "",
+      "options": [
+        "Access administration",
+        "Service change",
+        "Facilities support"
+      ],
+      "maxLength": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "id": "objective",
+      "label": "Measurable objective",
+      "type": "text",
+      "required": true,
+      "stage": "request",
+      "help": "State the result that the completion test must confirm.",
+      "placeholder": "Restore the shared case queue for all support coordinators.",
+      "options": [],
+      "maxLength": 240,
+      "min": null,
+      "max": null
+    },
+    {
+      "id": "description",
+      "label": "Current condition and proposed action",
+      "type": "multiline",
+      "required": true,
+      "stage": "request",
+      "help": "Identify the condition, proposed action, service owner, and dependencies.",
+      "placeholder": "Describe the request and the responsible service owner.",
+      "options": [],
+      "maxLength": 1000,
+      "min": null,
+      "max": null
+    },
+    {
+      "id": "impact",
+      "label": "Service impact",
+      "type": "multiline",
+      "required": true,
+      "stage": "impact",
+      "help": "Identify affected teams, available alternatives, and any planned interruption.",
+      "placeholder": "State how the current condition affects the team's work.",
+      "options": [],
+      "maxLength": 700,
+      "min": null,
+      "max": null
+    },
+    {
+      "id": "priority",
+      "label": "Requested priority",
+      "type": "select",
+      "required": true,
+      "stage": "impact",
+      "help": "Choose a priority supported by the recorded impact.",
+      "placeholder": "",
+      "options": [
+        "Urgent",
+        "High",
+        "Normal",
+        "Low"
+      ],
+      "maxLength": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "id": "target-date",
+      "label": "Target date",
+      "type": "date",
+      "required": true,
+      "stage": "impact",
+      "help": "Enter the requested date. The planning lead confirms the execution date.",
+      "placeholder": "",
+      "options": [],
+      "maxLength": null,
+      "min": null,
+      "max": null
+    }
+  ],
+  "referenceField": "reference",
+  "registerColumns": [
+    "reference",
+    "business-area",
+    "category",
+    "priority",
+    "target-date"
+  ],
+  "summaryFields": [
+    "reference",
+    "objective",
+    "priority"
+  ],
+  "assessmentFields": [
+    "business-area",
+    "category",
+    "objective",
+    "description",
+    "impact",
+    "priority",
+    "target-date"
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "schemaVersion": 1,
+  "activeProfile": "operational-request-review",
+  "port": 5187,
+  "storagePath": ".local/records"
+}

@@ -1,0 +1,99 @@
+{
+  "defaultProfile": "gpt",
+  "verificationProfile": "verifier",
+  "embeddingProfile": "embedding",
+  "extractionProfile": "extraction",
+  "profiles": [
+    {
+      "key": "gpt",
+      "label": "GPT 6.1",
+      "role": "answer",
+      "provider": "openai",
+      "deployment": "answer-gpt",
+      "model": "gpt-6.1-sol",
+      "version": "2026-09-29",
+      "sku": "DataZoneStandard",
+      "capacity": 100,
+      "maxOutputTokens": 8000,
+      "enabled": true
+    },
+    {
+      "key": "terra",
+      "label": "GPT 5.6 Terra",
+      "role": "answer",
+      "provider": "openai",
+      "deployment": "answer-terra",
+      "model": "gpt-5.6-terra",
+      "version": "2026-07-09",
+      "sku": "DataZoneStandard",
+      "capacity": 100,
+      "maxOutputTokens": 8000,
+      "enabled": false
+    },
+    {
+      "key": "opus",
+      "label": "Claude Opus 5.5",
+      "role": "answer",
+      "provider": "anthropic",
+      "deployment": "answer-opus",
+      "model": "claude-opus-5-5",
+      "version": "2",
+      "sku": "GlobalStandard",
+      "capacity": 100,
+      "maxOutputTokens": 8000,
+      "enabled": false
+    },
+    {
+      "key": "sonnet",
+      "label": "Claude Sonnet 5.5",
+      "role": "answer",
+      "provider": "anthropic",
+      "deployment": "answer-sonnet",
+      "model": "claude-sonnet-5-5",
+      "version": "2",
+      "sku": "GlobalStandard",
+      "capacity": 100,
+      "maxOutputTokens": 8000,
+      "enabled": false
+    },
+    {
+      "key": "verifier",
+      "label": "Evidence verifier",
+      "role": "verification",
+      "provider": "openai",
+      "deployment": "verify-evidence",
+      "model": "gpt-4.1",
+      "version": "2025-04-14",
+      "sku": "DataZoneStandard",
+      "capacity": 100,
+      "maxOutputTokens": 8000,
+      "enabled": true
+    },
+    {
+      "key": "embedding",
+      "label": "Source embeddings",
+      "role": "embedding",
+      "provider": "openai",
+      "deployment": "embed-sources",
+      "model": "text-embedding-3-small",
+      "version": "1",
+      "sku": "GlobalStandard",
+      "capacity": 30,
+      "maxOutputTokens": 1000,
+      "enabled": true
+    },
+    {
+      "key": "extraction",
+      "label": "Document extraction",
+      "role": "extraction",
+      "provider": "openai",
+      "deployment": "extract-content",
+      "model": "gpt-4.1",
+      "version": "2025-04-14",
+      "sku": "DataZoneStandard",
+      "capacity": 100,
+      "maxOutputTokens": 4000,
+      "enabled": true
+    }
+  ]
+}

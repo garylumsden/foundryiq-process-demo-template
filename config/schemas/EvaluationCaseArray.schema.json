@@ -1,0 +1,41 @@
+{
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string"
+      },
+      "question": {
+        "type": "string"
+      },
+      "expectedSources": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "expectedOutcome": {
+        "type": "string"
+      },
+      "images": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "minimumRecall": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "id",
+      "question",
+      "expectedSources",
+      "expectedOutcome",
+      "images",
+      "minimumRecall"
+    ],
+    "additionalProperties": false
+  }
+}

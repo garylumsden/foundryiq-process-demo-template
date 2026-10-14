@@ -1,0 +1,19 @@
+{
+  "layout": "compact",
+  "font": "humanist",
+  "textSize": 15,
+  "tokens": {
+    "ink": "#21332B",
+    "muted": "#4C5E53",
+    "primary": "#166344",
+    "onPrimary": "#FFFFFF",
+    "canvas": "#F4F8F4",
+    "surface": "#FFFFFF",
+    "border": "#BACBBC",
+    "focus": "#176449",
+    "danger": "#A32424",
+    "banner": "#204A38"
+  },
+  "logo": null,
+  "logoAlt": ""
+}

@@ -1,0 +1,51 @@
+{
+  "type": "object",
+  "properties": {
+    "prompts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "group": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "question": {
+            "type": "string"
+          },
+          "featured": {
+            "type": "boolean"
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "group",
+          "title",
+          "question",
+          "featured",
+          "images"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "formValues": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "prompts",
+    "formValues"
+  ],
+  "additionalProperties": false
+}

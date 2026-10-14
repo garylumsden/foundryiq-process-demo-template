@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f6f8">
+  <title>Workspace</title>
+  <link rel="stylesheet" href="/workspace.css">
+  <link rel="stylesheet" href="/theme.css">
+  <script defer src="/vendor/marked.umd.js"></script>
+  <script defer src="/vendor/purify.min.js"></script>
+  <script defer src="/mermaid-passage.js"></script>
+  <script defer src="/source-passage.js"></script>
+  <script defer src="/workspace.js"></script>
+  <script defer src="/process.js"></script>
+</head>
+<body>
+  <div class="top-banner">DEMO</div>
+  <p id="startup" class="startup" role="status">Loading…</p>
+  <div id="application" hidden>
+    <a class="skip-link" href="#main" data-ui="skipLink"></a>
+    <header class="app-header">
+      <a class="brand" href="/" aria-label="Workspace">
+        <img id="brand-logo" width="40" height="40" hidden alt="">
+        <span><strong data-ui="title"></strong><small id="profile-version"></small></span>
+      </a>
+      <nav aria-label="Main navigation">
+        <a href="/" data-ui="chatNav"></a>
+        <a href="/business-process.html" data-ui="processNav" aria-current="page"></a>
+      </nav>
+    </header>
+    <div class="service-strip">
+      <span id="readiness" role="status"></span>
+      <span id="usage" class="usage" aria-live="polite"></span>
+    </div>
+    <div id="service-error" class="error service-error" role="alert" hidden></div>
+    <main id="main" tabindex="-1">
+      <div class="page-heading">
+        <div><h1 data-ui="processHeading"></h1><p data-ui="processHelp"></p></div>
+        <button id="create-record" class="primary" type="button" data-ui="createRecord"></button>
+      </div>
+      <div id="process-error" class="error" role="alert" hidden></div>
+      <section id="register" class="panel" aria-labelledby="register-heading">
+        <div class="section-heading"><h2 id="register-heading" data-ui="registerHeading"></h2><span id="record-count" class="badge"></span></div>
+        <p id="empty-register" class="empty-state" data-ui="emptyRegister" hidden></p>
+        <div id="register-table" class="table-region" tabindex="0" role="region"></div>
+      </section>
+      <section id="new-record" class="panel" hidden aria-labelledby="form-heading">
+        <div class="section-heading">
+          <h2 id="form-heading"></h2>
+          <button id="fill-example" type="button" data-ui="fillExample"></button>
+        </div>
+        <form id="process-form">
+          <div id="process-fields"></div>
+          <div class="field model-field">
+            <label for="process-model" data-ui="modelLabel"></label>
+            <select id="process-model" name="model"></select>
+          </div>
+          <div id="process-images"></div>
+          <div id="form-error" class="error" role="alert" hidden></div>
+          <div class="actions">
+            <button id="submit-process" class="primary" type="submit" data-ui="submitProcess" data-inference></button>
+            <button id="cancel-record" type="button" data-ui="back"></button>
+          </div>
+        </form>
+      </section>
+      <section id="record-view" hidden aria-labelledby="record-heading">
+        <div class="record-toolbar"><button id="back-register" type="button" data-ui="back"></button><h2 id="record-heading"></h2></div>
+        <div id="record-content"></div>
+      </section>
+    </main>
+    <footer><span data-ui="footer"></span><span id="profile-purpose"></span></footer>
+  </div>
+</body>
+</html>

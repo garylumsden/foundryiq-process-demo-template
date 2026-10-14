@@ -1,0 +1,17 @@
+{
+  "title": "Document Review and Publication",
+  "sections": [
+    {
+      "heading": "Review requirements",
+      "text": "A process change requires review by the document owner and one affected process representative who did not write the change. An editorial correction requires the document owner's review. Record each reviewer's role, date, reviewed revision, and decision. Resolve every review comment or record the reviewer's acceptance of its disposition before publication."
+    },
+    {
+      "heading": "Revision and publication",
+      "text": "The document controller assigns the next revision identifier only after the required reviews are complete. The publication record must contain the document reference, approved content revision, effective date, document owner, and controlled location. The document owner authorizes publication of that exact revision. The controller must compare the published content with the reviewed content before making it available."
+    },
+    {
+      "heading": "Effective date and limitations",
+      "text": "For a process change, set the effective date at least five working days after the publication notice unless an urgent correction has a recorded authorization. An editorial correction may take effect on publication. This policy does not mandate a specific software tool, electronic-signature method, or universal revision-number format."
+    }
+  ]
+}

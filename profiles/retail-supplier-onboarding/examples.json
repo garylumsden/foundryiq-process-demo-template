@@ -1,0 +1,84 @@
+{
+  "prompts": [
+    {
+      "id": "supplier-intake",
+      "group": "Supplier review",
+      "title": "Check supplier identity",
+      "question": "What checks must the supplier coordinator complete before creating a supplier record?",
+      "featured": true,
+      "images": []
+    },
+    {
+      "id": "trial-readiness",
+      "group": "Readiness",
+      "title": "Prepare for a trial",
+      "question": "Which product and commercial records must be complete before the first trial order?",
+      "featured": true,
+      "images": []
+    },
+    {
+      "id": "activation-evidence",
+      "group": "Trial review",
+      "title": "Assess trial performance",
+      "question": "What evidence makes a supplier trial successful, and who records the activation decision?",
+      "featured": true,
+      "images": []
+    },
+    {
+      "id": "limited-extension",
+      "group": "Exceptions",
+      "title": "Extend a trial",
+      "question": "Only one trial delivery is complete. When may the buying manager extend the trial, and what limits remain?",
+      "featured": true,
+      "images": []
+    },
+    {
+      "id": "payment-period-gap",
+      "group": "Evidence gaps",
+      "title": "Payment period not specified",
+      "question": "What standard number of days must we give every supplier to receive payment?",
+      "featured": false,
+      "images": []
+    },
+    {
+      "id": "clarify-supplier",
+      "group": "Clarify the application",
+      "title": "Clarify an incomplete application",
+      "question": "Please assess a supplier application. I have not stated the supplier, products, review stage, or available evidence.",
+      "featured": false,
+      "images": []
+    },
+    {
+      "id": "off-task-supplier",
+      "group": "Scope boundaries",
+      "title": "An unrelated request",
+      "question": "Plan a three-day city break with restaurant recommendations.",
+      "featured": false,
+      "images": []
+    },
+    {
+      "id": "name-mismatch",
+      "group": "Supplier review",
+      "title": "Resolve a name mismatch",
+      "question": "The payment-account holder differs from the supplier trading name. Can product review continue, and can orders begin?",
+      "featured": false,
+      "images": []
+    }
+  ],
+  "formValues": {
+    "reference": "NS-SUP-0182",
+    "supplier-name": "Meadowline Homeware",
+    "product-category": "Homeware",
+    "buying-team": "Home and Living",
+    "trading-region": "United Kingdom",
+    "annual-order-value": 85000,
+    "onboarding-summary": "The application proposes boxed desk organizers delivered to the central receiving location. The supplier coordinator reports consistent trading-name and account-holder records and no duplicate supplier. A sample matched the buying brief. Final delivery charges and damaged-delivery terms remain unresolved. The category buyer proposes two trial deliveries; no orders have been authorized.",
+    "readiness-evidence": [
+      "Identity records",
+      "Product specification",
+      "Sample review"
+    ],
+    "review-stage": "Product and commercial review",
+    "proposed-start": "2026-11-02"
+  }
+}

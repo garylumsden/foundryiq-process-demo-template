@@ -1,0 +1,24 @@
+{
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "integer"
+    },
+    "activeProfile": {
+      "type": "string"
+    },
+    "port": {
+      "type": "integer"
+    },
+    "storagePath": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "activeProfile",
+    "port",
+    "storagePath"
+  ],
+  "additionalProperties": false
+}

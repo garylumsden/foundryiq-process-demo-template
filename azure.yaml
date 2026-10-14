@@ -1,0 +1,23 @@
+name: foundryiq-process-demo-template
+infra:
+  provider: bicep
+  path: infra
+workflows:
+  up:
+    - azd: env set AZD_DEPLOY_CONCURRENCY 1
+    - azd: hooks run preprovision
+    - azd: provision
+    - azd: hooks run postprovision
+hooks:
+  preprovision:
+    shell: pwsh
+    run: scripts/preprovision.ps1
+    interactive: false
+  postprovision:
+    shell: pwsh
+    run: scripts/configure.ps1
+    interactive: false
+  predown:
+    shell: pwsh
+    run: scripts/check-down.ps1
+    interactive: false

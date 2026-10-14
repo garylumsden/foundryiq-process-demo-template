@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "document-change-review",
+  "version": "1.0.0",
+  "title": "Document Control Workspace",
+  "customer": "Northstar Services",
+  "useCase": "Review internal controlled document changes against review, publication, distribution, and withdrawal requirements.",
+  "audience": "Document owners, document controllers, affected process representatives, and local copy owners.",
+  "industry": "Internal document control",
+  "purpose": "Review proposed changes to internal controlled documents, identify review and publication requirements, and retain change evidence.",
+  "allowedTopics": [
+    "Document change intake",
+    "Change classification",
+    "Independent review",
+    "Revision control",
+    "Publication and effective dates",
+    "Distribution",
+    "Document withdrawal",
+    "Urgent corrections"
+  ],
+  "excludedTopics": [
+    "Amending external publications",
+    "Legal advice",
+    "Contract interpretation",
+    "External certification requirements",
+    "Approval of unprovided documents",
+    "Unrelated creative or general-knowledge tasks"
+  ]
+}

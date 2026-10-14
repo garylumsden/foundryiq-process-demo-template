@@ -1,0 +1,17 @@
+{
+  "title": "Request Priority and Scheduling",
+  "sections": [
+    {
+      "heading": "Priority criteria",
+      "text": "Use urgent when an existing service interruption prevents a team from performing its primary work and no usable alternative exists. Use high when a time-bound dependency threatens a scheduled service commitment within five working days. Use normal for planned improvements without either condition. Use low when the request has no fixed dependency and can wait for the next planning cycle. Priority is based on documented impact, not the requester's seniority."
+    },
+    {
+      "heading": "Scheduling controls",
+      "text": "The planning lead sets the execution date after the service owner accepts the request for planning. Record an implementation owner, required access, affected service window, and a recovery action before execution. Notify affected teams at least two working days before a planned interruption. A target date is a requested date, not a confirmed execution commitment."
+    },
+    {
+      "heading": "Urgent scheduling exception",
+      "text": "An urgent interruption may use a shorter notification period when the service owner records the interruption evidence and explicitly authorizes the shorter period. Record who authorized it and notify affected teams before execution where possible. Record any delayed notification within one working day. This exception does not remove access checks or the recovery action."
+    }
+  ]
+}

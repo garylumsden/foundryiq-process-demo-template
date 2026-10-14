@@ -1,0 +1,59 @@
+name: Build and check
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: checks-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  check:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.3.0
+      - uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4.0.0
+        with:
+          dotnet-version: 10.0.x
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        with:
+          node-version: 24.x
+          package-manager-cache: false
+      - name: Restore locked dependencies
+        shell: pwsh
+        run: |
+          dotnet restore Workspace.sln --locked-mode
+          if ($LASTEXITCODE -ne 0) { throw 'NuGet restore failed.' }
+          Push-Location src\Workspace.Web\frontend
+          try {
+            npm ci
+            if ($LASTEXITCODE -ne 0) { throw 'npm restore failed.' }
+          } finally { Pop-Location }
+      - name: Check application, profiles, and browser
+        shell: pwsh
+        run: .\scripts\check.ps1 -Browser
+      - name: Compile infrastructure
+        shell: pwsh
+        run: |
+          az bicep install --version v0.48.1
+          if ($LASTEXITCODE -ne 0) { throw 'Bicep installation failed.' }
+          az bicep build --file infra\main.bicep --stdout --no-restore | Out-Null
+          if ($LASTEXITCODE -ne 0) { throw 'Infrastructure compilation failed.' }
+      - name: Check NuGet package vulnerabilities
+        shell: pwsh
+        run: |
+          $report = dotnet list Workspace.sln package --vulnerable --include-transitive --format json
+          if ($LASTEXITCODE -ne 0) { throw 'Package vulnerability analysis failed.' }
+          $report = $report | ConvertFrom-Json
+          foreach ($project in $report.projects) {
+            foreach ($framework in $project.frameworks) {
+              foreach ($package in @($framework.topLevelPackages) + @($framework.transitivePackages)) {
+                if ($package.vulnerabilities.Count -gt 0) { throw "Vulnerable package: $($package.id)." }
+              }
+            }
+          }
+      - name: Check browser package vulnerabilities
+        working-directory: src/Workspace.Web/frontend
+        run: npm audit --audit-level=high

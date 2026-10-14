@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType></PropertyGroup>
+  <ItemGroup><ProjectReference Include="..\..\src\Workspace.Core\Workspace.Core.csproj" /></ItemGroup>
+  <ItemGroup><PackageReference Include="Azure.Monitor.OpenTelemetry.AspNetCore" Version="1.6.0" /></ItemGroup>
+</Project>

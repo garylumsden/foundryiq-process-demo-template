@@ -1,0 +1,8 @@
+{
+  "documentSingular": "supplier policy",
+  "documentPlural": "supplier policies",
+  "caseSingular": "supplier application",
+  "casePlural": "supplier applications",
+  "processName": "Retail Supplier Onboarding",
+  "organization": "Northstar Services"
+}

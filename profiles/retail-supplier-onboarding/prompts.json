@@ -1,0 +1,15 @@
+{
+  "taskInstructions": "Review {{casePlural}} using retrieved {{documentPlural}} only. Separate identity, product, commercial, trial, and activation checks. Cite exact rules and exception limits. Do not invent certification duties, legal obligations, payment periods, or buying authority.",
+  "processInstructions": "Assess this {{caseSingular}} for {{processName}}. Identify the next review steps and the evidence required before a trial or activation. Treat selected evidence as reported, not verified. Identify unresolved identity or terms. Do not authorize orders, payment setup, or activation.",
+  "retrievalTerms": [
+    "supplier application",
+    "identity review",
+    "product readiness",
+    "commercial terms",
+    "trial entry",
+    "usable-unit rate",
+    "activation decision",
+    "supplier exception"
+  ],
+  "verificationInstructions": "Verify each statement against its cited {{documentSingular}} passage. Check trial-entry conditions, three-order and 30-day limits, two deliveries, 98 percent usable units, and the single 15-day extension. Reject inferred legal requirements or activation approvals."
+}

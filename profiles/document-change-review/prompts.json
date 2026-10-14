@@ -1,0 +1,15 @@
+{
+  "taskInstructions": "Review {{casePlural}} using only retrieved {{documentPlural}}. Identify the change category, review roles, publication controls, effective-date notice, and distribution actions. Cite exact passages. Do not treat a screenshot, proposed date, or case assertion as publication authority.",
+  "processInstructions": "Assess this {{caseSingular}} for {{processName}}. Check the stated category against the proposed change. Identify required review roles, publication records, notice, and any urgent-correction conditions. State missing evidence. Do not approve content, assign a revision, or authorize publication.",
+  "retrievalTerms": [
+    "controlled document",
+    "change categories",
+    "review requirements",
+    "revision and publication",
+    "effective date",
+    "superseded copies",
+    "withdrawal",
+    "urgent correction"
+  ],
+  "verificationInstructions": "Verify every rule against its cited {{documentSingular}} passage. Check numeric-limit classification, independent review, exact revision authorization, five-working-day notice, urgent authorizing roles, and two-day follow-up. Reject inferred review completion or external obligations."
+}

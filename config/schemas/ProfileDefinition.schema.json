@@ -1,0 +1,58 @@
+{
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "integer"
+    },
+    "id": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "industry": {
+      "type": "string"
+    },
+    "customer": {
+      "type": "string"
+    },
+    "useCase": {
+      "type": "string"
+    },
+    "audience": {
+      "type": "string"
+    },
+    "purpose": {
+      "type": "string"
+    },
+    "allowedTopics": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "excludedTopics": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "version",
+    "title",
+    "industry",
+    "customer",
+    "useCase",
+    "audience",
+    "purpose",
+    "allowedTopics",
+    "excludedTopics"
+  ],
+  "additionalProperties": false
+}

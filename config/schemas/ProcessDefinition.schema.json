@@ -1,0 +1,133 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "stages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "label"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "fields": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "stage": {
+            "type": "string"
+          },
+          "help": {
+            "type": "string"
+          },
+          "placeholder": {
+            "type": "string"
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "maxLength": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "min": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "max": {
+            "type": [
+              "number",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "label",
+          "type",
+          "required",
+          "stage",
+          "help",
+          "placeholder",
+          "options",
+          "maxLength",
+          "min",
+          "max"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "referenceField": {
+      "type": "string"
+    },
+    "registerColumns": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "summaryFields": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "assessmentFields": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "id",
+    "version",
+    "name",
+    "stages",
+    "fields",
+    "referenceField",
+    "registerColumns",
+    "summaryFields",
+    "assessmentFields"
+  ],
+  "additionalProperties": false
+}

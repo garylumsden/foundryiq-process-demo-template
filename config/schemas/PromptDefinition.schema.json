@@ -1,0 +1,27 @@
+{
+  "type": "object",
+  "properties": {
+    "taskInstructions": {
+      "type": "string"
+    },
+    "processInstructions": {
+      "type": "string"
+    },
+    "retrievalTerms": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "verificationInstructions": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "taskInstructions",
+    "processInstructions",
+    "retrievalTerms",
+    "verificationInstructions"
+  ],
+  "additionalProperties": false
+}

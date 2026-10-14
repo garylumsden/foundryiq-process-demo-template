@@ -1,0 +1,78 @@
+{
+  "prompts": [
+    {
+      "id": "intake-check",
+      "group": "Request review",
+      "title": "Required intake evidence",
+      "question": "What information must an operational request contain, and who records the intake decision?",
+      "featured": true,
+      "images": []
+    },
+    {
+      "id": "priority-check",
+      "group": "Planning",
+      "title": "Choose a supported priority",
+      "question": "A support queue is unavailable and the team has no usable alternative. Which priority applies, and what evidence is needed?",
+      "featured": true,
+      "images": []
+    },
+    {
+      "id": "closure-check",
+      "group": "Completion",
+      "title": "Close after no response",
+      "question": "The completion test passed, but the requester did not reply. Under what conditions may the service owner close the request?",
+      "featured": true,
+      "images": []
+    },
+    {
+      "id": "exception-check",
+      "group": "Exceptions",
+      "title": "Limits on an exception",
+      "question": "Can an operations manager waive a recovery action to meet a target date?",
+      "featured": true,
+      "images": []
+    },
+    {
+      "id": "retention-gap",
+      "group": "Evidence gaps",
+      "title": "Retention period not provided",
+      "question": "How many years must completed operational request records be retained?",
+      "featured": false,
+      "images": []
+    },
+    {
+      "id": "clarify-request",
+      "group": "Clarify the request",
+      "title": "Clarify an incomplete request",
+      "question": "Please assess my operational request. I have not specified the category, proposed action, or impact.",
+      "featured": false,
+      "images": []
+    },
+    {
+      "id": "off-task-request",
+      "group": "Scope boundaries",
+      "title": "An unrelated request",
+      "question": "Write a promotional poem about a weekend holiday.",
+      "featured": false,
+      "images": []
+    },
+    {
+      "id": "cross-service-review",
+      "group": "Request review",
+      "title": "Coordinate two services",
+      "question": "Our proposed operational change affects two services. Which ownership information must the request include?",
+      "featured": false,
+      "images": []
+    }
+  ],
+  "formValues": {
+    "reference": "NS-REQ-0264",
+    "business-area": "Customer Support",
+    "category": "Service change",
+    "objective": "Route incoming support cases to the shared queue within five minutes.",
+    "description": "The current queue rule assigns new cases to an inactive team. Update the routing rule and test it with three test cases. The Customer Support service owner will review the request. Digital Operations must provide an implementation owner and the required access.",
+    "impact": "Six support coordinators use manual assignment as an alternative. A 15-minute service window is proposed. The recovery action is to restore the current routing rule. No fixed external dependency is stated.",
+    "priority": "Normal",
+    "target-date": "2026-10-28"
+  }
+}

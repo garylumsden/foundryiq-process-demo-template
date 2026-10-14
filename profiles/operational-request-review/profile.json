@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "operational-request-review",
+  "version": "1.0.0",
+  "title": "Operations Workspace",
+  "customer": "Northstar Services",
+  "useCase": "Review internal operational requests against current policies before planning, execution, and closure.",
+  "audience": "Service owners, planning leads, implementation owners, and operations managers.",
+  "industry": "Business operations",
+  "purpose": "Review internal operational requests, identify the applicable controls, and record evidence needed for planning and closure.",
+  "allowedTopics": [
+    "Operational request intake",
+    "Service owner review",
+    "Request classification",
+    "Priority and scheduling",
+    "Implementation readiness",
+    "Completion and handover",
+    "Operational exceptions"
+  ],
+  "excludedTopics": [
+    "Employment decisions",
+    "Legal advice",
+    "Purchasing approval",
+    "Emergency response",
+    "External regulatory requirements",
+    "Unrelated creative or general-knowledge tasks"
+  ]
+}

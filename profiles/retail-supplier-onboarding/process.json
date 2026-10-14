@@ -1,0 +1,197 @@
+{
+  "id": "retail-supplier-onboarding",
+  "version": "1.0.0",
+  "name": "Retail Supplier Onboarding",
+  "stages": [
+    {
+      "id": "application",
+      "label": "Supplier application"
+    },
+    {
+      "id": "readiness",
+      "label": "Readiness and trial"
+    }
+  ],
+  "fields": [
+    {
+      "id": "reference",
+      "label": "Supplier reference",
+      "type": "text",
+      "required": true,
+      "stage": "application",
+      "help": "Use a unique application reference.",
+      "placeholder": "NS-SUP-0182",
+      "options": [],
+      "maxLength": 50,
+      "min": null,
+      "max": null
+    },
+    {
+      "id": "supplier-name",
+      "label": "Supplier name",
+      "type": "text",
+      "required": true,
+      "stage": "application",
+      "help": "Record the proposed trading name.",
+      "placeholder": "Meadowline Homeware",
+      "options": [],
+      "maxLength": 120,
+      "min": null,
+      "max": null
+    },
+    {
+      "id": "product-category",
+      "label": "Product category",
+      "type": "select",
+      "required": true,
+      "stage": "application",
+      "help": "Select the proposed buying category.",
+      "placeholder": "",
+      "options": [
+        "Homeware",
+        "Office supplies",
+        "Seasonal accessories",
+        "Packaging"
+      ],
+      "maxLength": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "id": "buying-team",
+      "label": "Buying team",
+      "type": "select",
+      "required": true,
+      "stage": "application",
+      "help": "Select the team responsible for the application.",
+      "placeholder": "",
+      "options": [
+        "Home and Living",
+        "Everyday Essentials",
+        "Seasonal Buying"
+      ],
+      "maxLength": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "id": "trading-region",
+      "label": "Trading region",
+      "type": "select",
+      "required": true,
+      "stage": "application",
+      "help": "Select the proposed fulfilment region.",
+      "placeholder": "",
+      "options": [
+        "United Kingdom",
+        "Ireland",
+        "Nordic countries",
+        "Central Europe"
+      ],
+      "maxLength": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "id": "annual-order-value",
+      "label": "Expected annual order value (GBP)",
+      "type": "number",
+      "required": true,
+      "stage": "application",
+      "help": "Enter the buying team's forecast. This value is not a purchase commitment.",
+      "placeholder": "",
+      "options": [],
+      "maxLength": null,
+      "min": 0,
+      "max": 10000000
+    },
+    {
+      "id": "onboarding-summary",
+      "label": "Products and fulfilment summary",
+      "type": "multiline",
+      "required": true,
+      "stage": "readiness",
+      "help": "Describe the products, contact role, delivery arrangement, and evidence still needed.",
+      "placeholder": "Record the proposed products and the current review position.",
+      "options": [],
+      "maxLength": 1000,
+      "min": null,
+      "max": null
+    },
+    {
+      "id": "readiness-evidence",
+      "label": "Available readiness evidence",
+      "type": "multiselect",
+      "required": true,
+      "stage": "readiness",
+      "help": "Select records reported as available. A selection does not verify the record.",
+      "placeholder": "",
+      "options": [
+        "Identity records",
+        "Product specification",
+        "Sample review",
+        "Commercial terms",
+        "Trial plan"
+      ],
+      "maxLength": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "id": "review-stage",
+      "label": "Current review stage",
+      "type": "select",
+      "required": true,
+      "stage": "readiness",
+      "help": "Select the current application stage.",
+      "placeholder": "",
+      "options": [
+        "Intake",
+        "Identity review",
+        "Product and commercial review",
+        "Trial",
+        "Activation review"
+      ],
+      "maxLength": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "id": "proposed-start",
+      "label": "Proposed start date",
+      "type": "date",
+      "required": true,
+      "stage": "readiness",
+      "help": "Enter the requested date for the first trial order.",
+      "placeholder": "",
+      "options": [],
+      "maxLength": null,
+      "min": null,
+      "max": null
+    }
+  ],
+  "referenceField": "reference",
+  "registerColumns": [
+    "reference",
+    "supplier-name",
+    "product-category",
+    "review-stage",
+    "proposed-start"
+  ],
+  "summaryFields": [
+    "reference",
+    "supplier-name",
+    "review-stage"
+  ],
+  "assessmentFields": [
+    "supplier-name",
+    "product-category",
+    "buying-team",
+    "trading-region",
+    "annual-order-value",
+    "onboarding-summary",
+    "readiness-evidence",
+    "review-stage",
+    "proposed-start"
+  ]
+}

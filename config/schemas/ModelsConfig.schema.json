@@ -1,0 +1,89 @@
+{
+  "type": "object",
+  "properties": {
+    "defaultProfile": {
+      "type": "string"
+    },
+    "verificationProfile": {
+      "type": "string"
+    },
+    "embeddingProfile": {
+      "type": "string"
+    },
+    "extractionProfile": {
+      "type": "string"
+    },
+    "profiles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "provider": {
+            "type": "string"
+          },
+          "deployment": {
+            "type": "string"
+          },
+          "model": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "sku": {
+            "type": "string"
+          },
+          "capacity": {
+            "type": "integer"
+          },
+          "maxOutputTokens": {
+            "type": "integer"
+          },
+          "enabled": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "key",
+          "label",
+          "role",
+          "provider",
+          "deployment",
+          "model",
+          "version",
+          "sku",
+          "capacity",
+          "maxOutputTokens",
+          "enabled"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "answers": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "#/properties/profiles/items"
+      }
+    }
+  },
+  "required": [
+    "defaultProfile",
+    "verificationProfile",
+    "embeddingProfile",
+    "extractionProfile",
+    "profiles"
+  ],
+  "additionalProperties": false
+}

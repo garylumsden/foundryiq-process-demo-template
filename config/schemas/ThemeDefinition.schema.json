@@ -1,0 +1,38 @@
+{
+  "type": "object",
+  "properties": {
+    "layout": {
+      "type": "string"
+    },
+    "font": {
+      "type": "string"
+    },
+    "textSize": {
+      "type": "integer"
+    },
+    "tokens": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "logo": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "logoAlt": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "layout",
+    "font",
+    "textSize",
+    "tokens",
+    "logo",
+    "logoAlt"
+  ],
+  "additionalProperties": false
+}

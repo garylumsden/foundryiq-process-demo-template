@@ -1,0 +1,8 @@
+{
+  "documentSingular": "document control policy",
+  "documentPlural": "document control policies",
+  "caseSingular": "document change request",
+  "casePlural": "document change requests",
+  "processName": "Controlled Document Change Review",
+  "organization": "Northstar Services"
+}
