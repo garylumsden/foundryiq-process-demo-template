@@ -45,6 +45,144 @@ public sealed class WorkspaceTests
     }
 
     [Fact]
+    public void OneManifestIsCreatedForEverySelectedAnswerModel()
+    {
+        using var copy = TwoModelCopy();
+        var config = new Configuration(copy.Root);
+        var manifests = AgentManifests.Create(config);
+        Assert.Equal(2, config.Models.Selection.Count);
+        Assert.Equal(2, manifests.Count);
+        Assert.Equal(2, manifests.Values.Select(manifest => manifest["name"]!.GetValue<string>()).Distinct().Count());
+        foreach (var model in config.Models.Answers)
+        {
+            var manifest = manifests[model.Key];
+            Assert.Equal(GroundedAssistant.AgentName(config, model), manifest["name"]!.GetValue<string>());
+            Assert.Equal(model.Deployment, manifest["definition"]!["model"]!.GetValue<string>());
+            Assert.Equal(config.Digest, manifest["metadata"]!["profile_digest"]!.GetValue<string>());
+            Assert.Equal("workspace-grounding", manifest["definition"]!["tools"]![0]!["server_label"]!.GetValue<string>());
+            Assert.Equal("json_schema", manifest["definition"]!["text"]!["format"]!["type"]!.GetValue<string>());
+            AgentManifests.RequireCurrent(config, model.Key, manifest);
+        }
+        Assert.DoesNotContain(config.Models.VerificationProfile, manifests.Keys);
+        Assert.DoesNotContain(config.Models.EmbeddingProfile, manifests.Keys);
+        Assert.DoesNotContain(config.Models.ExtractionProfile, manifests.Keys);
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(1)]
+    [InlineData(3)]
+    public void RequestedModelCountMustMatchEnabledAnswers(int count)
+    {
+        using var copy = TwoModelCopy();
+        copy.Change("config/models.json", node => node["selection"]!["count"] = count);
+        Assert.Throws<WorkspaceException>(() => new Configuration(copy.Root));
+    }
+
+    [Fact]
+    public void ExplicitModelChoicesCannotBeSilentlySubstituted()
+    {
+        using var copy = TwoModelCopy();
+        copy.Change("config/models.json", node => node["selection"]!["explicitModelKeys"] = new JsonArray("gpt", "terra"));
+        _ = new Configuration(copy.Root);
+        copy.Change("config/models.json", node => node["selection"]!["explicitModelKeys"] = new JsonArray("gpt", "missing"));
+        Assert.Throws<WorkspaceException>(() => new Configuration(copy.Root));
+    }
+
+    [Theory]
+    [InlineData("promptAgent")]
+    [InlineData("mcp")]
+    [InlineData("structuredOutputs")]
+    public void SelectedModelsMustSupportTheManagedAgentContract(string capability)
+    {
+        using var copy = TwoModelCopy();
+        copy.Change("config/models.json", node => node["profiles"]![1]!["capabilities"]![capability] = false);
+        Assert.Throws<WorkspaceException>(() => new Configuration(copy.Root));
+    }
+
+    [Fact]
+    public void ManifestGenerationDoesNotFilterByProviderName()
+    {
+        using var copy = TwoModelCopy();
+        copy.Change("config/models.json", node =>
+        {
+            node["profiles"]![1]!["provider"] = "partner";
+            node["profiles"]![1]!["format"] = "CatalogFormat";
+        });
+        var config = new Configuration(copy.Root);
+        Assert.Equal(2, AgentManifests.Create(config).Count);
+    }
+
+    [Fact]
+    public void AgentCompletionRequiresEverySelectedVersionAndRejectsExtras()
+    {
+        using var copy = TwoModelCopy();
+        var config = new Configuration(copy.Root);
+        var complete = new DeploymentState(config.Digest, new() { ["gpt"] = "1", ["terra"] = "2" });
+        complete.RequireComplete(config);
+        Assert.Throws<WorkspaceException>(() => (complete with { ProfileDigest = "stale" }).RequireComplete(config));
+        Assert.Throws<WorkspaceException>(() => new DeploymentState(config.Digest, new() { ["gpt"] = "1" }).RequireComplete(config));
+        Assert.Throws<WorkspaceException>(() => new DeploymentState(config.Digest, new() { ["gpt"] = "1", ["terra"] = "0" }).RequireComplete(config));
+        Assert.Throws<WorkspaceException>(() => new DeploymentState(config.Digest, new() { ["gpt"] = "1", ["terra"] = "2", ["extra"] = "3" }).RequireComplete(config));
+    }
+
+    [Fact]
+    public void AManifestCannotKeepTheDigestWhileChangingItsModel()
+    {
+        var config = new Configuration(Root);
+        var manifest = AgentManifests.Create(config)[config.Models.DefaultProfile];
+        manifest["definition"]!["model"] = "unselected-deployment";
+        Assert.Throws<WorkspaceException>(() => AgentManifests.RequireCurrent(config, config.Models.DefaultProfile, manifest));
+    }
+
+    [Fact]
+    public void ChangingModelSelectionInvalidatesApproval()
+    {
+        using var copy = new RepositoryCopy();
+        var original = new Configuration(copy.Root);
+        File.WriteAllText(Path.Combine(original.Directory, "approval.json"),
+            JsonSerializer.Serialize(new Approval(original.Digest, "approved"), Json.Options));
+        copy.Change("config/models.json", node => node["selection"]!["capabilityMix"] = "Fast responses with image input");
+        Assert.False(new Configuration(copy.Root).Approved);
+    }
+
+    [Fact]
+    public async Task ImageInputIsRejectedBeforeCallingAnIncompatibleModel()
+    {
+        using var copy = new RepositoryCopy();
+        copy.Change("config/models.json", node => node["profiles"]![0]!["capabilities"]!["images"] = false);
+        var config = new Configuration(copy.Root);
+        using var cloud = new CloudClient(config, Settings());
+        var assistant = new GroundedAssistant(config, cloud, new(config.Digest, new() { ["gpt"] = "1" }));
+        var error = await Assert.ThrowsAsync<WorkspaceException>(() => assistant.AskAsync(
+            new("Review this input.", [], [new("input.png", "image/png", [1])], "gpt"), CancellationToken.None));
+        Assert.Equal("images_not_supported", error.Code);
+    }
+
+    [Fact]
+    public void ImageEvaluationsRequireCompatibleSelections()
+    {
+        using var copy = new RepositoryCopy();
+        copy.Change("config/models.json", node => node["profiles"]![0]!["capabilities"]!["images"] = false);
+        var config = new Configuration(copy.Root);
+        var item = new EvaluationCase("image-case", "Review the visible context.", [config.Sources.Documents[0].Id], "answered", ["input.png"], .9);
+        var error = Assert.Throws<WorkspaceException>(() => EvaluationChecks.Validate(config, [item]));
+        Assert.Equal("cases_incompatible", error.Code);
+    }
+
+    private static RepositoryCopy TwoModelCopy()
+    {
+        var copy = new RepositoryCopy();
+        copy.Change("config/models.json", node =>
+        {
+            node["selection"]!["count"] = 2;
+            node["selection"]!["capabilityMix"] = "Balanced and deeper reasoning";
+            node["profiles"]![1]!["enabled"] = true;
+        });
+        return copy;
+    }
+
+    [Fact]
     public void UnknownConfigurationPropertiesFailWithAPropertyPath()
     {
         using var copy = new RepositoryCopy();

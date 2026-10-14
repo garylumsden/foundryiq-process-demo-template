@@ -4,7 +4,7 @@
 
 1. The browser reads sanitized configuration and an antiforgery token.
 2. The server validates the question, model choice, history, form fields, and images.
-3. The selected model path retrieves from the configured Foundry IQ knowledge base.
+3. The selected model's pinned Foundry prompt agent retrieves from the configured Foundry IQ knowledge base.
 4. The server binds reference IDs to admitted native passages.
 5. The server checks response structure and reference identities.
 6. An evidence-only verification call checks every claim and the task scope.
@@ -15,6 +15,19 @@ The verifier receives the approved task, current request, candidate claims, rele
 It cannot retrieve other material.
 Missing, uncertain, failed, incomplete, and unsupported decisions block factual output.
 Rejected prose is not returned as an accepted answer.
+
+## Selected models and agents
+
+The setup agent collects the answer-model count and capability mix, with an explicit-model option.
+It resolves and confirms compatible managed prompt-agent models.
+Each enabled answer profile has a distinct agent name and pinned version.
+All answer models use the Foundry project Responses API and the same grounding contract.
+There is no provider-specific native inference bypass.
+
+`azd up` generates one manifest per selected answer model and creates its agent after the model deployments and source ingestion.
+The tooling publishes deployment state only after every selected agent becomes active.
+The selected model count, generated manifests, pinned version map, and runtime choices must agree.
+Embedding, extraction, and verification models are supporting dependencies rather than additional answer agents.
 
 ## Evidence boundary
 

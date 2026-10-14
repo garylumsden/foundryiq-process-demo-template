@@ -19,6 +19,23 @@ Passing structure checks does not establish permission or subject-matter approva
 Check domain instructions against the fixed evidence rules.
 Review sample questions without exposing evaluation expectations.
 Check form examples, required fields, source references, and configured colors.
+Check that `selection.count` matches the enabled answer profiles.
+Check that explicit model keys match the selection exactly.
+Require prompt-agent, MCP, and structured-output support for every selected answer model.
+Check image support against the inputs and evaluation cases.
+Do not treat a capability flag as proof of catalog availability or successful deployment.
+
+Generate manifests without creating Azure resources:
+
+```powershell
+dotnet run --project tools\Workspace.Tools -- manifests
+```
+
+Require one distinct named manifest per selected answer model.
+Exclude verification, extraction, and embedding dependencies from that agent count.
+After an approved `azd up`, require a pinned active agent version for every selected answer profile.
+Missing, invalid, extra, or stale version mappings must not pass readiness.
+Do not permit provider-specific native-API fallback paths.
 
 Report the exact digest and changes for user review.
 After explicit approval, record that supplied digest:

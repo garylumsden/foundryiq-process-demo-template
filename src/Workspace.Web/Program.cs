@@ -56,11 +56,9 @@ if (cloud is not null && config.Approved && File.Exists(statePath))
     try
     {
         var state = Json.Read<DeploymentState>(statePath);
-        if (state.ProfileDigest != config.Digest) throw new WorkspaceException("deployment_mismatch", "The deployed prompts do not match the active profile.");
+        state.RequireComplete(config);
         await cloud.VerifyIdentityAsync(CancellationToken.None);
         await cloud.RegistryAsync(CancellationToken.None);
-        foreach (var model in config.Models.Answers.Where(model => model.Provider == "openai"))
-            if (!state.AgentVersions.ContainsKey(model.Key)) throw new WorkspaceException("agent_version_missing", "A selected model has no pinned agent.");
         assistant = new(config, cloud, state);
         ready = true;
         readinessCode = "ready";

@@ -8,15 +8,30 @@ description: Create or update configuration profiles, process fields, terminolog
 Produce a complete profile using `docs/configuration.md` and `config/schemas`.
 
 1. Confirm the proposed business process and field set.
-2. Create a lowercase profile ID and a versioned process definition.
-3. Define ordered stages and supported typed fields.
-4. Explain each field's purpose and assessment mapping.
-5. Define register columns, summary fields, and the reference field.
-6. Write terminology and user-interface text for the approved context.
-7. Generate task-specific prompt sections without altering the shared evidence policy.
-8. Add supplied sources or reviewable authored policies with accurate source metadata.
-9. Create sample questions and valid example form values.
-10. Draft separate evaluation cases with expected evidence and safe outcomes.
+2. Confirm the requested answer-model count, capability mix, and any explicit model choices.
+3. Resolve compatible models and present their exact IDs, versions, deployment names, and default choice.
+4. Create a lowercase profile ID and a versioned process definition.
+5. Define ordered stages and supported typed fields.
+6. Explain each field's purpose and assessment mapping.
+7. Define register columns, summary fields, and the reference field.
+8. Write terminology and user-interface text for the approved context.
+9. Generate task-specific prompt sections without altering the shared evidence policy.
+10. Add supplied sources or reviewable authored policies with accurate source metadata.
+11. Create sample questions and valid example form values.
+12. Draft separate evaluation cases with expected evidence and safe outcomes.
+
+Write model choices to `config/models.json`.
+Set `selection.count` to the number of enabled answer profiles.
+Describe the requested capabilities in `selection.capabilityMix`.
+Use `selection.explicitModelKeys` for explicit choices, or an empty array for a capability-led recommendation.
+Resolve any user-supplied model names to the exact confirmed profile keys.
+Keep the supporting verification, embedding, and extraction models outside the answer-model count.
+
+Check current catalog evidence for the model version, provider format, managed prompt agents, MCP, structured outputs, and any required image support.
+Capability flags record the reviewed selection; they do not prove deployment success.
+Do not guess availability or quota.
+Reject incompatible choices without changing their names or using another runtime.
+Every selected answer model must use a distinct deployed Foundry prompt agent.
 
 Keep all required files from a complete starter profile.
 Read the schemas instead of inventing property names.

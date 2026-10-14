@@ -106,28 +106,11 @@ try
     {
         var directory = Path.Combine(root, ".local", "agents");
         Directory.CreateDirectory(directory);
-        foreach (var model in config.Models.Answers.Where(model => model.Provider == "openai"))
+        foreach (var (key, manifest) in AgentManifests.Create(config))
         {
-            var manifest = new
-            {
-                name = GroundedAssistant.AgentName(config, model),
-                metadata = new { profile_digest = config.Digest, model_profile = model.Key },
-                definition = new
-                {
-                    kind = "prompt", model = model.Deployment, instructions = PromptComposer.Instructions(config),
-                    text = new { format = new { type = "json_schema", name = "grounded_answer", strict = true, schema = PromptComposer.AnswerSchema } },
-                    tools = new[] { new
-                    {
-                        type = "mcp", server_label = "workspace-grounding",
-                        server_url = "${SEARCH_ENDPOINT}/knowledgebases/" + config.Sources.KnowledgeBase + "/mcp?api-version=" + config.Sources.SearchApiVersion,
-                        allowed_tools = new { tool_names = new[] { "knowledge_base_retrieve" } }, require_approval = "never",
-                        project_connection_id = config.Sources.Connection
-                    } }
-                }
-            };
-            await File.WriteAllTextAsync(Path.Combine(directory, model.Key + ".agent.yaml"), JsonSerializer.Serialize(manifest, Json.Options) + "\n");
+            await File.WriteAllTextAsync(Path.Combine(directory, key + ".agent.yaml"), manifest.ToJsonString(Json.Options) + "\n");
         }
-        Console.WriteLine("Generated runtime manifests from the current profile.");
+        Console.WriteLine($"Generated {config.Models.Answers.Length} runtime agent manifests for the selected answer models.");
         return;
     }
     if (command is "ingest" or "deploy-agents" or "evaluate")
@@ -149,27 +132,37 @@ try
         if (command == "deploy-agents")
         {
             var versions = new Dictionary<string, string>();
-            foreach (var model in config.Models.Answers.Where(model => model.Provider == "openai"))
+            foreach (var model in config.Models.Answers)
             {
                 var path = Path.Combine(root, ".local", "agents", model.Key + ".agent.yaml");
                 var manifest = JsonNode.Parse(await File.ReadAllTextAsync(path))!.AsObject();
-                if (manifest["metadata"]?["profile_digest"]?.GetValue<string>() != config.Digest)
-                    throw new WorkspaceException("manifest_stale", "Regenerate the runtime manifests before deployment.");
+                AgentManifests.RequireCurrent(config, model.Key, manifest);
                 var tools = manifest["definition"]!["tools"]!.AsArray();
                 foreach (var tool in tools) tool!["server_url"] = tool["server_url"]!.GetValue<string>()
                     .Replace("${SEARCH_ENDPOINT}", cloud.Settings.Search.ToString().TrimEnd('/'), StringComparison.Ordinal);
                 var body = new { metadata = manifest["metadata"], definition = manifest["definition"] };
-                var response = await cloud.ProjectAsync(HttpMethod.Post, "agents/" + GroundedAssistant.AgentName(config, model) + "/versions?api-version=v1", body, CancellationToken.None);
+                JsonElement response;
+                try
+                {
+                    response = await cloud.ProjectAsync(HttpMethod.Post, "agents/" + GroundedAssistant.AgentName(config, model) + "/versions?api-version=v1", body, CancellationToken.None);
+                }
+                catch (CloudException error)
+                {
+                    throw new WorkspaceException("agent_deployment_failed",
+                        $"Agent creation failed for model profile '{model.Key}' ({error.Status}). Check model availability, prompt-agent support, MCP, and structured outputs. No partial deployment state was published.");
+                }
                 var version = EvidenceParser.Get(response, "version");
                 if (EvidenceParser.Get(response, "status") != "active" || !int.TryParse(version, out var number) || number < 1)
-                    throw new WorkspaceException("agent_inactive", "The new agent version did not become active.");
+                    throw new WorkspaceException("agent_inactive", $"The agent for model profile '{model.Key}' did not become active. No partial deployment state was published.");
                 versions.Add(model.Key, version);
             }
             var directory = Path.Combine(root, ".local");
             Directory.CreateDirectory(directory);
+            var deployed = new DeploymentState(config.Digest, versions);
+            deployed.RequireComplete(config);
             await File.WriteAllTextAsync(Path.Combine(directory, "deployment-state.json"),
-                JsonSerializer.Serialize(new DeploymentState(config.Digest, versions), Json.Options) + "\n");
-            Console.WriteLine($"Pinned {versions.Count} prompt-agent versions.");
+                JsonSerializer.Serialize(deployed, Json.Options) + "\n");
+            Console.WriteLine($"Deployed and pinned {versions.Count} separate prompt agents for {config.Models.Selection.Count} selected answer models.");
             return;
         }
         var state = Json.Read<DeploymentState>(Path.Combine(root, ".local", "deployment-state.json"));

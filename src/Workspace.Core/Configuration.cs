@@ -87,11 +87,25 @@ public sealed class Configuration
         Require(Policy.Id == "evidence-v1" && Policy.Rules.Length >= 6, "policy.core.json", "The shared evidence policy is required.");
         Require(Models.Profiles.Select(model => model.Key).Distinct().Count() == Models.Profiles.Length, "models.json profiles", "Model keys must be unique.");
         foreach (var model in Models.Profiles)
-            Require(Id(model.Key) && Id(model.Deployment) && model.Provider is "openai" or "anthropic"
+            Require(Id(model.Key) && Id(model.Deployment) && Id(model.Provider)
                 && model.Role is "answer" or "verification" or "embedding" or "extraction"
                 && model.Capacity > 0 && model.MaxOutputTokens is > 0 and <= 16000
                 && !string.IsNullOrWhiteSpace(model.Model) && !string.IsNullOrWhiteSpace(model.Version)
-                && !string.IsNullOrWhiteSpace(model.Sku), $"models.json {model.Key}", "Invalid deployment or limits.");
+                && !string.IsNullOrWhiteSpace(model.Sku) && !string.IsNullOrWhiteSpace(model.Format),
+                $"models.json {model.Key}", "Invalid deployment, provider format, or limits.");
+        Require(Models.Selection.Count > 0 && Models.Selection.Count == Models.Answers.Length
+            && !string.IsNullOrWhiteSpace(Models.Selection.CapabilityMix),
+            "models.json selection", "The requested model count must match enabled answer profiles and include a capability mix.");
+        Require(Models.Selection.ExplicitModelKeys.Length == 0
+            || Models.Selection.ExplicitModelKeys.Length == Models.Selection.Count
+                && Models.Selection.ExplicitModelKeys.Distinct().Count() == Models.Selection.Count
+                && Models.Selection.ExplicitModelKeys.ToHashSet(StringComparer.Ordinal)
+                    .SetEquals(Models.Answers.Select(model => model.Key)),
+            "models.json selection.explicitModelKeys", "Explicit model choices must match the enabled answer profiles exactly.");
+        foreach (var model in Models.Answers)
+            Require(model.Capabilities is { PromptAgent: true, Mcp: true, StructuredOutputs: true },
+                $"models.json {model.Key}.capabilities",
+                "Selected answer models must support Foundry prompt agents, MCP retrieval, and structured outputs. No native-API fallback is available.");
         Require(Models.Get(Models.DefaultProfile).Role == "answer", "models.json defaultProfile", "Select an answer model.");
         Require(Models.Get(Models.VerificationProfile) is { Role: "verification", Provider: "openai" }, "models.json verificationProfile", "Select an enabled OpenAI verifier.");
         Require(Models.Get(Models.EmbeddingProfile) is { Role: "embedding", Provider: "openai" }

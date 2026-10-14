@@ -42,9 +42,11 @@ public sealed class CloudException(string operation, int status) : Exception($"C
 }
 
 public sealed record AppConfig(int SchemaVersion, string ActiveProfile, int Port, string StoragePath);
-public sealed record ModelProfile(string Key, string Label, string Role, string Provider, string Deployment,
-    string Model, string Version, string Sku, int Capacity, int MaxOutputTokens, bool Enabled);
-public sealed record ModelsConfig(string DefaultProfile, string VerificationProfile, string EmbeddingProfile,
+public sealed record ModelCapabilities(bool PromptAgent, bool Mcp, bool StructuredOutputs, bool Images);
+public sealed record ModelSelection(int Count, string CapabilityMix, string[] ExplicitModelKeys);
+public sealed record ModelProfile(string Key, string Label, string Role, string Provider, string Format, string Deployment,
+    string Model, string Version, string Sku, int Capacity, int MaxOutputTokens, bool Enabled, ModelCapabilities Capabilities);
+public sealed record ModelsConfig(ModelSelection Selection, string DefaultProfile, string VerificationProfile, string EmbeddingProfile,
     string ExtractionProfile, ModelProfile[] Profiles)
 {
     public ModelProfile Get(string key) => Profiles.SingleOrDefault(profile => profile.Key == key && profile.Enabled)
@@ -111,4 +113,17 @@ public sealed record ProcessRecord(string Id, string ProfileId, string ProfileDi
     ProcessDefinition Process, Dictionary<string, JsonElement> Values, AnswerResult Assessment, DateTimeOffset RecordedAt);
 public sealed record EvaluationCase(string Id, string Question, string[] ExpectedSources, string ExpectedOutcome,
     string[] Images, double MinimumRecall);
-public sealed record DeploymentState(string ProfileDigest, Dictionary<string, string> AgentVersions);
+public sealed record DeploymentState(string ProfileDigest, Dictionary<string, string> AgentVersions)
+{
+    public void RequireComplete(Configuration config)
+    {
+        if (ProfileDigest != config.Digest)
+            throw new WorkspaceException("deployment_mismatch", "The deployed agents do not match the active profile.");
+        var selected = config.Models.Answers.Select(model => model.Key).ToHashSet(StringComparer.Ordinal);
+        if (AgentVersions.Count != selected.Count || AgentVersions.Keys.Any(key => !selected.Contains(key))
+            || selected.Any(key => !AgentVersions.TryGetValue(key, out var version)
+                || !int.TryParse(version, System.Globalization.NumberStyles.None, System.Globalization.CultureInfo.InvariantCulture, out var number)
+                || number < 1))
+            throw new WorkspaceException("agent_versions_incomplete", "Every selected answer model needs its own pinned deployed agent version.");
+    }
+}

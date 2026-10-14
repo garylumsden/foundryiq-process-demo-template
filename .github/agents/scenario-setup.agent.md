@@ -32,6 +32,39 @@ Offer three source paths: supplied approved documents, optional deep research, o
 When the user selects research, activate `scenario-research`.
 Do not imply that research ran when tools or sources were unavailable.
 
+## Model count and capability mix
+
+Ask which runtime answer models the user wants before finalizing configuration.
+Start with the number of models and desired capability mix, not a required list of product names.
+Use the host's question tool when available.
+Offer choices such as:
+
+- One balanced model.
+- Two models: fast responses and stronger reasoning.
+- Three models: fast responses, balanced capability, and deeper reasoning.
+- A custom mix, including image input when needed.
+- Explicit model names or deployment preferences supplied by the user.
+
+Do not assume the starter selection is the user's choice.
+If the user already specified a count or model names, confirm those values instead of asking again.
+For updates, ask whether to retain or change the current selection.
+The count includes answer models only.
+It excludes this Copilot session's model and the verification, extraction, and embedding dependencies.
+
+Recommend exact models after resolving the intended capabilities.
+Verify current model/version, deployment format, prompt-agent support, MCP tools, structured outputs, location availability, and quota.
+Check image input support when the scenario requires it.
+Do not infer those capabilities from a provider name.
+When discovery is unavailable, state the gap and leave deployment readiness unresolved.
+Do not silently substitute an explicitly requested model.
+If a requested model is incompatible, explain the constraint and request an alternative.
+Do not introduce a native-API bypass or hosted adapter.
+
+Present the resolved model IDs, versions, capability fit, deployment names, agent names, and default model for confirmation.
+Disclose the supporting model dependencies separately.
+Record the confirmed count, capability mix, optional explicit profile keys, and selected answer profiles in `config/models.json`.
+Each selected answer profile must have its own named Foundry prompt agent after `azd up`.
+
 ## Authoring
 
 Activate `process-profile-authoring` to prepare the profile.

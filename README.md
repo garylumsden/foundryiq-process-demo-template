@@ -38,8 +38,31 @@ Configure this workspace for a retail purchasing team's supplier onboarding proc
 Suggest the process, stages, and fields before writing the final profile.
 Research the topic deeply, then propose policies, sample questions, and a suitable visual style.
 I will supply the logo.
+Ask how many answer models I want and which capability mix I need.
+Let me name exact models if I have a preference.
 Keep responses within the approved scope and support factual document claims with verified evidence.
 ```
+
+### Choose the model count and capability mix
+
+The setup agent asks how many answer models you want and which capabilities matter.
+You do not need to know product names.
+Typical choices are one balanced model, two models for fast responses and stronger reasoning, or a custom mix.
+You can instead specify exact models.
+Image input is checked when the scenario needs it.
+
+The agent recommends compatible models and asks you to confirm their exact IDs, versions, deployment names, and default choice.
+It checks Foundry prompt-agent support, MCP tools, structured outputs, target availability, and quota.
+It must report unresolved availability rather than guess or silently replace an explicit choice.
+Raw model inference support alone is not enough.
+Native-API fallbacks and hosted model adapters are outside this template's deployment path.
+
+The confirmed choice is stored in `config\models.json`.
+`selection.count` must match the enabled answer profiles.
+`selection.capabilityMix` records your intent.
+`selection.explicitModelKeys` records explicit profile choices, or remains empty for capability-led recommendations.
+The count excludes this Copilot session's model and the verification, extraction, and embedding dependencies.
+The agent presents those supporting dependencies separately.
 
 ### What the agent configures
 
@@ -84,9 +107,9 @@ Application Insights receives safe operational traces.
 The local app uses your existing Azure CLI identity.
 It does not deploy a public web application.
 
-GPT profiles use pinned Foundry prompt agents.
-Claude profiles use the native Messages API and application-managed Foundry IQ retrieval.
-Only enabled model profiles and their supporting deployments are provisioned.
+Each selected answer model uses its own named, version-pinned Foundry prompt agent.
+All answer models use the same evidence and verification controls.
+Only compatible enabled model profiles and their supporting deployments are provisioned.
 
 ## Start locally
 
@@ -223,6 +246,13 @@ Keep expected source IDs and expected outcomes there, not inside user-facing que
 Include supported questions, missing information, evidence gaps, injection attempts, and off-task requests.
 Review the expectations before running live acceptance.
 
+Also review `config\models.json` when configuring manually.
+Set the requested count and capability mix, then enable exactly that many answer profiles.
+Set `defaultProfile` to one of those profiles.
+For explicit choices, list their profile keys in `selection.explicitModelKeys`.
+Populate provider format and capability fields from current catalog evidence.
+See [Model selection](docs/configuration.md#model-selection) for the full contract.
+
 ### 6. Prepare, validate, and review
 
 ```powershell
@@ -266,8 +296,10 @@ The deployment scripts only check existing authentication.
 Edit `config\models.json` to select enabled answer models and supporting deployments.
 Do not enable a model that is unavailable in the selected subscription and location.
 The default enables one GPT answer profile plus verification, extraction, and embedding models.
-Claude answer profiles are available but disabled by default.
-They require accurate provider attestations and explicit acceptance of the applicable terms.
+The setup agent must confirm your preferred count and mix rather than assume that starter choice.
+Each answer model must support managed prompt agents, MCP retrieval, and structured outputs.
+The configured capability flags record your selection; they do not prove service availability.
+Review any required provider attestations and terms before deployment.
 
 After approving the profile:
 
@@ -285,7 +317,12 @@ azd up --no-prompt
 .\scripts\start.ps1 -Cloud
 ```
 
-The lifecycle validates the profile, resolves Bicep parameters, provisions selected dependencies, ingests documents, and pins prompt-agent versions.
+The lifecycle validates the profile, resolves Bicep parameters, provisions selected dependencies, and ingests documents.
+It generates and deploys a separate prompt agent for every selected answer model.
+Agent names use `<profile-id>-<model-key>`.
+Each agent uses its selected model deployment and the approved grounding instructions.
+The lifecycle records pinned versions only after every selected agent becomes active.
+The app rejects missing, invalid, extra, or stale agent-version mappings.
 It creates no public web host.
 It does not configure a spending limit.
 Review the resulting Azure charges.
@@ -294,6 +331,8 @@ Cloud settings remain in ignored AZD files.
 The application requires matching profile, registry, and deployment digests.
 Ingestion publishes no partial registry.
 No answer appears if required verification fails.
+Disabling a model changes the active selection but does not automatically delete earlier Azure deployments or agent versions.
+Cleanup requires a separate approved action.
 
 ## Checks
 
@@ -331,6 +370,7 @@ The evaluator reads `evals\<active-profile-id>\cases.json`.
 It runs each case once for every enabled answer model in `config\models.json`.
 It evaluates only the active profile, not every profile directory.
 The Copilot setup agent can draft these cases, but you must review their expectations against the admitted sources.
+Image cases require image input support in every selected answer model.
 
 Each case defines:
 

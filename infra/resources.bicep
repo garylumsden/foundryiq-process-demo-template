@@ -42,7 +42,7 @@ resource modelDeployments 'Microsoft.CognitiveServices/accounts/deployments@2026
     sku: { name: model.sku, capacity: model.capacity }
     properties: {
       model: {
-        format: model.provider == 'anthropic' ? 'Anthropic' : 'OpenAI'
+        format: model.format
         name: model.model
         version: model.version
       }

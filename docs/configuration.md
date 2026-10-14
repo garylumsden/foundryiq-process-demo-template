@@ -8,7 +8,7 @@ The manual README procedure and the setup agent use the same contract.
 | File | Purpose |
 |---|---|
 | `config\app.json` | Active profile, local port, and local record path |
-| `config\models.json` | Enabled model profiles, provider paths, deployment names, versions, and capacities |
+| `config\models.json` | Requested count and capability mix, explicit choices, enabled profiles, provider formats, capabilities, and deployments |
 | `config\policy.core.json` | Shared non-overridable evidence and task rules |
 | `profile.json` | Identity, version, customer context, industry, use case, audience, purpose, and task scope |
 | `terminology.json` | Simple placeholder names and their values |
@@ -31,6 +31,51 @@ Do not commit a private active-profile selection to a public repository.
 The JSON schemas under `config\schemas` describe file shapes.
 The validator also checks cross-file references, asset paths, source hashes, contrast, options, and supported limits.
 Unknown properties fail instead of being ignored.
+
+## Model selection
+
+The setup agent asks for the number of answer models and the desired capability mix.
+It offers explicit model names as an alternative to capability-led recommendations.
+It confirms the resolved IDs, versions, deployments, and default profile before activation.
+It must not treat the starter configuration as your decision.
+
+`config\models.json` stores that selection:
+
+```json
+{
+  "selection": {
+    "count": 2,
+    "capabilityMix": "Balanced responses and deeper reasoning",
+    "explicitModelKeys": ["gpt", "terra"]
+  }
+}
+```
+
+Enable the corresponding answer profiles when using that example.
+The requested count must equal the number of enabled profiles whose role is `answer`.
+An empty `explicitModelKeys` array means capability-led selection.
+A nonempty array must match the enabled answer-profile keys exactly, without duplicates.
+`defaultProfile` must select an enabled answer profile.
+Verification, extraction, and embedding dependencies do not count as answer choices.
+
+Each profile declares its model ID, version, provider, Azure deployment format, SKU, capacity, and token limit.
+Use the exact format returned by the model catalog; do not infer it from an API name.
+Its `capabilities` object records `promptAgent`, `mcp`, `structuredOutputs`, and `images`.
+Every enabled answer model must support the first three.
+Image input support is required when submitting images or running image cases.
+
+Verify those capabilities, location availability, quota, and any provider terms against current evidence.
+Declared flags are not proof that a model is deployable.
+An incompatible explicit choice requires an alternative, not silent substitution or a different runtime.
+The template supports managed prompt agents only.
+It does not deploy native-API or hosted model adapters.
+
+`azd up` provisions the enabled model deployments and creates one prompt agent per answer profile.
+Agent names are `<profile-id>-<model-key>`.
+Supporting model dependencies do not receive conversation agents.
+Every selected agent must become active before the tooling publishes its pinned version map.
+Runtime readiness requires the exact selected key set, valid pinned versions, and a matching content digest.
+Changing the count or mix invalidates previous approval.
 
 ## Source documents
 

@@ -1,6 +1,29 @@
 {
   "type": "object",
   "properties": {
+    "selection": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer"
+        },
+        "capabilityMix": {
+          "type": "string"
+        },
+        "explicitModelKeys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "count",
+        "capabilityMix",
+        "explicitModelKeys"
+      ],
+      "additionalProperties": false
+    },
     "defaultProfile": {
       "type": "string"
     },
@@ -30,6 +53,9 @@
           "provider": {
             "type": "string"
           },
+          "format": {
+            "type": "string"
+          },
           "deployment": {
             "type": "string"
           },
@@ -50,6 +76,30 @@
           },
           "enabled": {
             "type": "boolean"
+          },
+          "capabilities": {
+            "type": "object",
+            "properties": {
+              "promptAgent": {
+                "type": "boolean"
+              },
+              "mcp": {
+                "type": "boolean"
+              },
+              "structuredOutputs": {
+                "type": "boolean"
+              },
+              "images": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "promptAgent",
+              "mcp",
+              "structuredOutputs",
+              "images"
+            ],
+            "additionalProperties": false
           }
         },
         "required": [
@@ -57,13 +107,15 @@
           "label",
           "role",
           "provider",
+          "format",
           "deployment",
           "model",
           "version",
           "sku",
           "capacity",
           "maxOutputTokens",
-          "enabled"
+          "enabled",
+          "capabilities"
         ],
         "additionalProperties": false
       }
@@ -79,6 +131,7 @@
     }
   },
   "required": [
+    "selection",
     "defaultProfile",
     "verificationProfile",
     "embeddingProfile",

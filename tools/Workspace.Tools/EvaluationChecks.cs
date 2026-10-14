@@ -29,6 +29,8 @@ public static class EvaluationChecks
                 || item.ExpectedSources.Any(id => !config.Sources.Documents.Any(source => source.Id == id
                     && source.Eligible(DateOnly.FromDateTime(DateTime.UtcNow)))))
                 throw new WorkspaceException("cases_invalid", $"cases.json [{index}]: check the question, expected outcome, eligible source IDs, and recall threshold.");
+            if (item.Images.Length > 0 && config.Models.Answers.Any(model => !model.Capabilities.Images))
+                throw new WorkspaceException("cases_incompatible", $"cases.json [{index}]: image cases require image input support in every selected answer model.");
             ImageValidation.Normalize(item.Images.Select(config.ReadImage).ToArray());
         }
     }

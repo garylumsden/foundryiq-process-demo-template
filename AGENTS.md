@@ -3,6 +3,9 @@
 Read `README.md` for the recommended Copilot-guided setup and manual fallback.
 Use `.github/agents/scenario-setup.agent.md` as the primary route for scenario configuration.
 Retain the manual configuration path for users without Copilot.
+Ask for answer-model count and capability mix, with an option to name exact models.
+Use only compatible Foundry prompt-agent models.
+Keep one deployed agent per selected answer model; do not add native-API fallbacks.
 
 Validate profiles before changing runtime behavior:
 

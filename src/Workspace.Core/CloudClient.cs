@@ -67,7 +67,6 @@ public sealed class CloudClient : IDisposable
             using var request = new HttpRequestMessage(method, uri);
             var token = await Credential.GetTokenAsync(new TokenRequestContext([audience + "/.default"]), ct);
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token.Token);
-            if (uri.AbsolutePath.Contains("/anthropic/", StringComparison.Ordinal)) request.Headers.Add("anthropic-version", "2023-06-01");
             if (serialized is not null) request.Content = new StringContent(serialized, Encoding.UTF8, "application/json");
             using var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, ct);
             if (response.IsSuccessStatusCode)
@@ -92,8 +91,6 @@ public sealed class CloudClient : IDisposable
         SendAsync(method, new Uri(Settings.Project.ToString().TrimEnd('/') + "/" + path.TrimStart('/')), "https://ai.azure.com", body, ct);
     public Task<JsonElement> OpenAiAsync(object body, CancellationToken ct) =>
         SendAsync(HttpMethod.Post, new Uri(Settings.Foundry, "/openai/v1/chat/completions"), "https://cognitiveservices.azure.com", body, ct);
-    public Task<JsonElement> ClaudeAsync(object body, CancellationToken ct) =>
-        SendAsync(HttpMethod.Post, new Uri($"https://{Settings.Project.Host}/anthropic/v1/messages"), "https://ai.azure.com", body, ct);
 
     public async Task<SourceRegistry> RegistryAsync(CancellationToken ct)
     {
