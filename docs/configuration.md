@@ -77,6 +77,7 @@ Agent names are `<profile-id>-<model-key>`.
 Supporting model dependencies do not receive conversation agents.
 Every selected agent must become active before the tooling publishes its pinned version map.
 Runtime readiness requires the exact selected key set, valid pinned versions, and a matching content digest.
+The pinned state must also match the current cloud target.
 Changing the count or mix invalidates previous approval.
 
 ## Source documents
@@ -147,6 +148,12 @@ The active profile is selected at startup.
 Changing the selected profile requires a restart.
 
 The cloud registry and `.local\deployment-state.json` must match the digest.
+Deployment state records the tenant and the Foundry account, project, Search, and Storage endpoints.
+Startup, evaluation, and assistant construction reject a different target.
+The tooling replaces the state atomically only after every selected agent becomes active.
+Switching targets requires a matching agent deployment for the selected target.
+Older state files without target identity are rejected.
+Deploy the approved agents again to create the current state format.
 Regenerate manifests and deploy pinned agents after prompt changes.
 Reingest after source or profile changes.
 Do not edit generated manifests or deployment state to bypass readiness checks.
@@ -156,5 +163,26 @@ Do not edit generated manifests or deployment state to bypass readiness checks.
 Use six-digit hex colors for the defined theme tokens.
 Use a configured local font choice, not a remote font URL.
 Use supported layout variants and a text size from 14 px to 18 px.
+Configured text requires at least 4.5:1 contrast on its actual backgrounds, including tinted and hover states.
+The banner uses `onPrimary` against `banner`, not an assumed white foreground.
+Focus indicators require at least 3:1 contrast against the surface and canvas.
 The server supplies a validated external theme stylesheet.
 No unrestricted HTML, CSS, scripts, shell commands, or provider adapters can enter through profile configuration.
+
+## Deployment controls
+
+The `up` workflow calls `azd provision`.
+AZD runs the registered preparation and configuration hooks once.
+Do not add manual hook calls around `provision`.
+See the [AZD hook contract](https://learn.microsoft.com/azure/developer/azure-developer-cli/azd-extensibility).
+
+Application Insights uses an ordinary deployment output for its routing connection string.
+AZD cannot export secure ARM outputs to its environment.
+The instrumentation key is an identifier, not an authentication token.
+The resource disables local authentication and requires Microsoft Entra credentials for ingestion.
+See [Application Insights connection strings](https://learn.microsoft.com/azure/azure-monitor/app/connection-strings).
+
+Teardown requires process-only approval and verified resource-group identity and ownership tags.
+The guard rejects missing selected-environment values instead of using inherited values.
+It does not grant deletion approval or delete resources itself.
+Package-source configuration remains outside the repository, including CI commands.

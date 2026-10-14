@@ -26,6 +26,8 @@ There is no provider-specific native inference bypass.
 
 `azd up` generates one manifest per selected answer model and creates its agent after the model deployments and source ingestion.
 The tooling publishes deployment state only after every selected agent becomes active.
+It replaces the state atomically and binds it to the tenant and cloud endpoints.
+Startup and evaluation reject state from another target.
 The selected model count, generated manifests, pinned version map, and runtime choices must agree.
 Embedding, extraction, and verification models are supporting dependencies rather than additional answer agents.
 
@@ -60,6 +62,8 @@ The application checks the configured principal before cloud readiness.
 Cloud scripts do not initiate interactive authentication.
 
 Application Insights records safe outcome, verification, model, version, token, and latency metadata.
+AZD exports its routing connection string without treating the resource identifier as an authentication token.
+The resource disables local authentication; exporters supply Microsoft Entra credentials.
 Questions, form data, source passages, images, customer names, and credentials must not enter logs.
 The browser receives no deployment endpoints or environment identity settings.
 

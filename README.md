@@ -320,17 +320,23 @@ azd up --no-prompt
 ```
 
 The lifecycle validates the profile, resolves Bicep parameters, provisions selected dependencies, and ingests documents.
+`azd provision` runs the registered preparation and configuration hooks once.
 It generates and deploys a separate prompt agent for every selected answer model.
 Agent names use `<profile-id>-<model-key>`.
 Each agent uses its selected model deployment and the approved grounding instructions.
 The lifecycle records pinned versions only after every selected agent becomes active.
-The app rejects missing, invalid, extra, or stale agent-version mappings.
+The app rejects missing, invalid, extra, stale, or cross-target agent-version mappings.
 It creates no public web host.
 It does not configure a spending limit.
 Review the resulting Azure charges.
 
 Cloud settings remain in ignored AZD files.
+AZD exports the Application Insights routing connection string as a normal output.
+The string identifies the telemetry destination; it does not authorize ingestion.
+Microsoft Entra authentication remains mandatory, and local authentication remains disabled.
 The application requires matching profile, registry, and deployment digests.
+Pinned agents also require a matching tenant and Foundry account, project, Search, and Storage endpoints.
+Older deployment-state files without target identity require agent deployment again.
 Ingestion publishes no partial registry.
 No answer appears if required verification fails.
 Disabling a model changes the active selection but does not automatically delete earlier Azure deployments or agent versions.
@@ -466,6 +472,8 @@ azd down --force --purge --no-prompt
 ```
 
 This deletes the selected environment and can purge supported soft-deleted resources.
+The guard verifies the selected subscription, `rg-<environment>` group, and ownership tags before permitting deletion.
+Missing or mismatched ownership stops the command.
 Never use it against an unrelated environment.
 
 ## License

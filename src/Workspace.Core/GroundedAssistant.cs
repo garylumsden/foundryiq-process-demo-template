@@ -3,9 +3,20 @@ using System.Text.Json;
 
 namespace Workspace.Core;
 
-public sealed class GroundedAssistant(Configuration config, CloudClient api, DeploymentState deployment)
+public sealed class GroundedAssistant
 {
+    private readonly Configuration config;
+    private readonly CloudClient api;
+    private readonly DeploymentState deployment;
     public static readonly ActivitySource Traces = new("ProcessWorkspace");
+
+    public GroundedAssistant(Configuration config, CloudClient api, DeploymentState deployment)
+    {
+        deployment.RequireComplete(config, api.Settings);
+        this.config = config;
+        this.api = api;
+        this.deployment = deployment;
+    }
 
     public async Task<AnswerResult> AskAsync(QuestionInput input, CancellationToken ct)
     {
@@ -63,7 +74,7 @@ public sealed class GroundedAssistant(Configuration config, CloudClient api, Dep
         {
             if (!config.Approved)
                 throw new WorkspaceException("approval_required", "The active profile and deployment must match the approved configuration.");
-            deployment.RequireComplete(config);
+            deployment.RequireComplete(config, api.Settings);
             var registry = await api.RegistryAsync(ct);
             var prompt = JsonSerializer.Serialize(new
             {

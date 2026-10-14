@@ -45,6 +45,62 @@ public sealed class WorkspaceTests
     }
 
     [Fact]
+    public void BannerContrastUsesTheConfiguredForeground()
+    {
+        using var copy = new RepositoryCopy();
+        copy.Change("profiles/operational-request-review/theme.json", node =>
+        {
+            foreach (var token in new[] { "ink", "muted", "primary", "focus", "danger" })
+                node["tokens"]![token] = "#FFFFFF";
+            foreach (var token in new[] { "surface", "canvas", "onPrimary", "banner" })
+                node["tokens"]![token] = "#000000";
+        });
+        var error = Assert.Throws<WorkspaceException>(() => new Configuration(copy.Root));
+        Assert.Contains("onPrimary/banner", error.Message);
+        copy.Change("profiles/operational-request-review/theme.json", node => node["tokens"]!["banner"] = "#FFFFFF");
+        _ = new Configuration(copy.Root);
+    }
+
+    [Theory]
+    [InlineData("primary", "surface")]
+    [InlineData("danger", "surface")]
+    [InlineData("focus", "surface")]
+    [InlineData("ink", "canvas")]
+    [InlineData("muted", "canvas")]
+    public void ConfiguredTextAndFocusMustContrastWithTheirBackgrounds(string foreground, string background)
+    {
+        using var copy = new RepositoryCopy();
+        copy.Change("profiles/operational-request-review/theme.json", node =>
+            node["tokens"]![foreground] = node["tokens"]![background]!.GetValue<string>());
+        Assert.Throws<WorkspaceException>(() => new Configuration(copy.Root));
+    }
+
+    [Fact]
+    public void TintedStatesCannotReduceTextBelowTheContrastThreshold()
+    {
+        using var copy = new RepositoryCopy();
+        Assert.True(Configuration.Contrast("#767676", "#FFFFFF") >= 4.5);
+        copy.Change("profiles/operational-request-review/theme.json", node =>
+        {
+            node["tokens"]!["primary"] = "#767676";
+            node["tokens"]!["canvas"] = "#FFFFFF";
+        });
+        var error = Assert.Throws<WorkspaceException>(() => new Configuration(copy.Root));
+        Assert.Contains("primary/surface", error.Message);
+    }
+
+    [Fact]
+    public void ContrastCalculationPreservesRequiredThresholds()
+    {
+        Assert.Equal(21, Configuration.Contrast("#000000", "#FFFFFF"), 6);
+        Assert.Equal(1, Configuration.Contrast("#000000", "#000000"), 6);
+        Assert.True(Configuration.Contrast("#777777", "#FFFFFF") < 4.5);
+        Assert.True(Configuration.Contrast("#767676", "#FFFFFF") >= 4.5);
+        Assert.True(Configuration.Contrast("#959595", "#FFFFFF") < 3);
+        Assert.True(Configuration.Contrast("#949494", "#FFFFFF") >= 3);
+    }
+
+    [Fact]
     public void OneManifestIsCreatedForEverySelectedAnswerModel()
     {
         using var copy = TwoModelCopy();
@@ -118,12 +174,60 @@ public sealed class WorkspaceTests
     {
         using var copy = TwoModelCopy();
         var config = new Configuration(copy.Root);
-        var complete = new DeploymentState(config.Digest, new() { ["gpt"] = "1", ["terra"] = "2" });
-        complete.RequireComplete(config);
-        Assert.Throws<WorkspaceException>(() => (complete with { ProfileDigest = "stale" }).RequireComplete(config));
-        Assert.Throws<WorkspaceException>(() => new DeploymentState(config.Digest, new() { ["gpt"] = "1" }).RequireComplete(config));
-        Assert.Throws<WorkspaceException>(() => new DeploymentState(config.Digest, new() { ["gpt"] = "1", ["terra"] = "0" }).RequireComplete(config));
-        Assert.Throws<WorkspaceException>(() => new DeploymentState(config.Digest, new() { ["gpt"] = "1", ["terra"] = "2", ["extra"] = "3" }).RequireComplete(config));
+        var settings = Settings();
+        var complete = new DeploymentState(config.Digest, DeploymentTarget.FromSettings(settings), new() { ["gpt"] = "1", ["terra"] = "2" });
+        complete.RequireComplete(config, settings);
+        Assert.Throws<WorkspaceException>(() => (complete with { ProfileDigest = "stale" }).RequireComplete(config, settings));
+        Assert.Throws<WorkspaceException>(() => (complete with { AgentVersions = new() { ["gpt"] = "1" } }).RequireComplete(config, settings));
+        Assert.Throws<WorkspaceException>(() => (complete with { AgentVersions = new() { ["gpt"] = "1", ["terra"] = "0" } }).RequireComplete(config, settings));
+        Assert.Throws<WorkspaceException>(() => (complete with { AgentVersions = new() { ["gpt"] = "1", ["terra"] = "2", ["extra"] = "3" } }).RequireComplete(config, settings));
+    }
+
+    [Theory]
+    [InlineData("tenant")]
+    [InlineData("foundry")]
+    [InlineData("project")]
+    [InlineData("search")]
+    [InlineData("storage")]
+    public void PinnedAgentsCannotBeUsedAgainstAnotherCloudTarget(string changed)
+    {
+        var config = new Configuration(Root);
+        var settings = Settings();
+        var state = new DeploymentState(config.Digest, DeploymentTarget.FromSettings(settings), new() { ["gpt"] = "1" });
+        var other = changed switch
+        {
+            "tenant" => settings with { TenantId = Guid.NewGuid().ToString() },
+            "foundry" => settings with { Foundry = new("https://other.openai.azure.com") },
+            "project" => settings with { Project = new("https://workspace.services.ai.azure.com/api/projects/other") },
+            "search" => settings with { Search = new("https://other.search.windows.net") },
+            "storage" => settings with { Storage = new("https://other.blob.core.windows.net") },
+            _ => throw new ArgumentOutOfRangeException(nameof(changed))
+        };
+        var error = Assert.Throws<WorkspaceException>(() => state.RequireComplete(config, other));
+        Assert.Equal("deployment_target_mismatch", error.Code);
+        using var cloud = new CloudClient(config, other);
+        Assert.Throws<WorkspaceException>(() => new GroundedAssistant(config, cloud, state));
+    }
+
+    [Fact]
+    public void DeploymentTargetNormalizesEndpointFormatting()
+    {
+        var settings = Settings();
+        Assert.Equal(DeploymentTarget.FromSettings(settings), DeploymentTarget.FromSettings(settings with
+        {
+            Project = new("https://WORKSPACE.services.ai.azure.com/api/projects/process/"),
+            Search = new("https://workspace.search.windows.net/")
+        }));
+    }
+
+    [Fact]
+    public void LegacyDeploymentStateWithoutTargetIdentityIsRejected()
+    {
+        using var copy = new RepositoryCopy();
+        var path = Path.Combine(copy.Root, "deployment-state.json");
+        File.WriteAllText(path, """{"profileDigest":"previous","agentVersions":{"gpt":"1"}}""");
+        var error = Assert.Throws<WorkspaceException>(() => Json.Read<DeploymentState>(path));
+        Assert.Equal("configuration_invalid", error.Code);
     }
 
     [Fact]
@@ -153,7 +257,7 @@ public sealed class WorkspaceTests
         copy.Change("config/models.json", node => node["profiles"]![0]!["capabilities"]!["images"] = false);
         var config = new Configuration(copy.Root);
         using var cloud = new CloudClient(config, Settings());
-        var assistant = new GroundedAssistant(config, cloud, new(config.Digest, new() { ["gpt"] = "1" }));
+        var assistant = new GroundedAssistant(config, cloud, new(config.Digest, DeploymentTarget.FromSettings(cloud.Settings), new() { ["gpt"] = "1" }));
         var error = await Assert.ThrowsAsync<WorkspaceException>(() => assistant.AskAsync(
             new("Review this input.", [], [new("input.png", "image/png", [1])], "gpt"), CancellationToken.None));
         Assert.Equal("images_not_supported", error.Code);

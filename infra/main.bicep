@@ -58,5 +58,5 @@ output FOUNDRY_PROJECT_ENDPOINT string = resources.outputs.projectEndpoint
 output SEARCH_ENDPOINT string = resources.outputs.searchEndpoint
 output STORAGE_ENDPOINT string = resources.outputs.storageEndpoint
 output AZURE_STORAGE_RESOURCE_ID string = resources.outputs.storageId
-@secure()
+@description('Telemetry routing metadata. Microsoft Entra authentication is required for ingestion.')
 output APPLICATIONINSIGHTS_CONNECTION_STRING string = resources.outputs.insightsConnectionString

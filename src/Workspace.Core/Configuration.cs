@@ -175,10 +175,24 @@ public sealed class Configuration
         Require(Theme.Tokens.Count == colors.Length && colors.All(Theme.Tokens.ContainsKey), "theme.json tokens", "Provide the supported color tokens.");
         foreach (var color in Theme.Tokens)
             Require(Regex.IsMatch(color.Value, "^#[0-9a-fA-F]{6}$"), $"theme.json {color.Key}", "Use a six-digit hex color.");
-        Require(Contrast(Theme.Tokens["ink"], Theme.Tokens["surface"]) >= 4.5
-            && Contrast(Theme.Tokens["muted"], Theme.Tokens["surface"]) >= 4.5
-            && Contrast(Theme.Tokens["primary"], Theme.Tokens["onPrimary"]) >= 4.5
-            && Contrast("#ffffff", Theme.Tokens["banner"]) >= 4.5, "theme.json", "Text contrast must be at least 4.5:1.");
+        void RequireContrast(string foreground, string background, double minimum, string? tint = null, double amount = 0)
+        {
+            Require(Contrast(Theme.Tokens[foreground], Theme.Tokens[background],
+                tint is null ? null : Theme.Tokens[tint], amount) >= minimum,
+                $"theme.json {foreground}/{background}", $"Contrast must be at least {minimum.ToString(CultureInfo.InvariantCulture)}:1, including configured hover and tinted states.");
+        }
+        RequireContrast("onPrimary", "banner", 4.5);
+        RequireContrast("onPrimary", "primary", 4.5);
+        foreach (var background in new[] { "surface", "canvas" })
+        {
+            foreach (var foreground in new[] { "ink", "muted", "primary", "danger" })
+                RequireContrast(foreground, background, 4.5);
+            RequireContrast("focus", background, 3);
+        }
+        RequireContrast("primary", "surface", 4.5, "primary", .08);
+        RequireContrast("danger", "surface", 4.5, "danger", .05);
+        RequireContrast("ink", "surface", 4.5, "primary", .06);
+        RequireContrast("onPrimary", "primary", 4.5, "ink", .12);
         if (Theme.Logo is not null)
         {
             Require(!string.IsNullOrWhiteSpace(Theme.LogoAlt), "theme.json logoAlt", "Describe the logo.");
@@ -221,19 +235,23 @@ public sealed class Configuration
         return Convert.ToHexString(hash.GetHashAndReset());
     }
 
-    public static double Contrast(string first, string second)
+    public static double Contrast(string first, string second) => Contrast(first, second, null, 0);
+
+    private static double Contrast(string first, string second, string? tint, double amount)
     {
-        static double Luminance(string color)
+        static double Luminance(string color, string? blendColor = null, double blendAmount = 0)
         {
             double Channel(int offset)
             {
                 var value = int.Parse(color.AsSpan(offset, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture) / 255d;
+                if (blendColor is not null)
+                    value = value * (1 - blendAmount) + int.Parse(blendColor.AsSpan(offset, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture) / 255d * blendAmount;
                 return value <= .04045 ? value / 12.92 : Math.Pow((value + .055) / 1.055, 2.4);
             }
             return .2126 * Channel(1) + .7152 * Channel(3) + .0722 * Channel(5);
         }
         var a = Luminance(first);
-        var b = Luminance(second);
+        var b = Luminance(second, tint, amount);
         return (Math.Max(a, b) + .05) / (Math.Min(a, b) + .05);
     }
 

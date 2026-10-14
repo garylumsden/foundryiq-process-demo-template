@@ -158,10 +158,19 @@ try
             }
             var directory = Path.Combine(root, ".local");
             Directory.CreateDirectory(directory);
-            var deployed = new DeploymentState(config.Digest, versions);
-            deployed.RequireComplete(config);
-            await File.WriteAllTextAsync(Path.Combine(directory, "deployment-state.json"),
-                JsonSerializer.Serialize(deployed, Json.Options) + "\n");
+            var deployed = new DeploymentState(config.Digest, DeploymentTarget.FromSettings(cloud.Settings), versions);
+            deployed.RequireComplete(config, cloud.Settings);
+            var statePath = Path.Combine(directory, "deployment-state.json");
+            var temporary = statePath + "." + Guid.NewGuid().ToString("N") + ".tmp";
+            try
+            {
+                await File.WriteAllTextAsync(temporary, JsonSerializer.Serialize(deployed, Json.Options) + "\n");
+                File.Move(temporary, statePath, overwrite: true);
+            }
+            finally
+            {
+                if (File.Exists(temporary)) File.Delete(temporary);
+            }
             Console.WriteLine($"Deployed and pinned {versions.Count} separate prompt agents for {config.Models.Selection.Count} selected answer models.");
             return;
         }

@@ -2,6 +2,11 @@ $ErrorActionPreference = 'Stop'
 $values = & azd env get-values --output json
 if ($LASTEXITCODE -ne 0) { throw 'Select an AZD environment in this repository before using cloud commands.' }
 $values = $values | ConvertFrom-Json
+foreach ($name in @('AZURE_ENV_NAME', 'AZURE_SUBSCRIPTION_ID')) {
+    if ([string]::IsNullOrWhiteSpace($values.$name)) {
+        throw "The selected AZD environment is missing $name."
+    }
+}
 if (@($values.PSObject.Properties.Name | Where-Object { $_ -in @('WORKSPACE_DEPLOYMENT_APPROVAL', 'WORKSPACE_DELETE_APPROVAL') }).Count -gt 0) {
     throw 'Remove persisted deployment or deletion approval from the AZD environment. Supply approval only in the current process.'
 }

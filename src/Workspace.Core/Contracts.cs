@@ -113,12 +113,22 @@ public sealed record ProcessRecord(string Id, string ProfileId, string ProfileDi
     ProcessDefinition Process, Dictionary<string, JsonElement> Values, AnswerResult Assessment, DateTimeOffset RecordedAt);
 public sealed record EvaluationCase(string Id, string Question, string[] ExpectedSources, string ExpectedOutcome,
     string[] Images, double MinimumRecall);
-public sealed record DeploymentState(string ProfileDigest, Dictionary<string, string> AgentVersions)
+public sealed record DeploymentTarget(Guid TenantId, Uri Foundry, Uri Project, Uri Search, Uri Storage)
 {
-    public void RequireComplete(Configuration config)
+    public static DeploymentTarget FromSettings(CloudSettings settings) => new(Guid.Parse(settings.TenantId),
+        Normalize(settings.Foundry), Normalize(settings.Project), Normalize(settings.Search), Normalize(settings.Storage));
+
+    private static Uri Normalize(Uri endpoint) => new(endpoint.AbsoluteUri.TrimEnd('/'));
+}
+
+public sealed record DeploymentState(string ProfileDigest, DeploymentTarget Target, Dictionary<string, string> AgentVersions)
+{
+    public void RequireComplete(Configuration config, CloudSettings settings)
     {
         if (ProfileDigest != config.Digest)
             throw new WorkspaceException("deployment_mismatch", "The deployed agents do not match the active profile.");
+        if (Target != DeploymentTarget.FromSettings(settings))
+            throw new WorkspaceException("deployment_target_mismatch", "The pinned agents belong to a different Azure target. Deploy the agents for the selected target.");
         var selected = config.Models.Answers.Select(model => model.Key).ToHashSet(StringComparer.Ordinal);
         if (AgentVersions.Count != selected.Count || AgentVersions.Keys.Any(key => !selected.Contains(key))
             || selected.Any(key => !AgentVersions.TryGetValue(key, out var version)

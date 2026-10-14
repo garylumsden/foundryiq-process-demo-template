@@ -5,9 +5,7 @@ infra:
 workflows:
   up:
     - azd: env set AZD_DEPLOY_CONCURRENCY 1
-    - azd: hooks run preprovision
     - azd: provision
-    - azd: hooks run postprovision
 hooks:
   preprovision:
     shell: pwsh

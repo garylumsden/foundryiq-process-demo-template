@@ -56,7 +56,7 @@ if (cloud is not null && config.Approved && File.Exists(statePath))
     try
     {
         var state = Json.Read<DeploymentState>(statePath);
-        state.RequireComplete(config);
+        state.RequireComplete(config, cloud.Settings);
         await cloud.VerifyIdentityAsync(CancellationToken.None);
         await cloud.RegistryAsync(CancellationToken.None);
         assistant = new(config, cloud, state);

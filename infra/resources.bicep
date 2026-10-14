@@ -235,5 +235,5 @@ output projectEndpoint string = 'https://${foundry.name}.services.ai.azure.com/a
 output searchEndpoint string = 'https://${search.name}.search.windows.net'
 output storageEndpoint string = storage.properties.primaryEndpoints.blob
 output storageId string = storage.id
-@secure()
+@description('Telemetry routing metadata. Local authentication is disabled on the resource.')
 output insightsConnectionString string = insights.properties.ConnectionString
